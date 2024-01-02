@@ -14,6 +14,11 @@ let UserApi = {
     adduser(data, errorback) {
         return request._post('/shop/user.user/add', data, errorback);
     },
+	
+ /*添加用户  ricky 20240102 */
+	addUserAddress(data, errorback) {
+     return request._post('/shop/user.user/addUserAddress', data, errorback);
+	},
  
     /*修改用户*/
     edituser(data, errorback) {
