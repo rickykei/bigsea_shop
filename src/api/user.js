@@ -14,7 +14,7 @@ let UserApi = {
     adduser(data, errorback) {
         return request._post('/shop/user.user/add', data, errorback);
     },
-
+ 
     /*修改用户*/
     edituser(data, errorback) {
         return request._post('/shop/user.user/edit', data, errorback);
@@ -60,6 +60,9 @@ let UserApi = {
     EditPass(data, errorback) {
         return request._post('/shop/passport/editPass', data, errorback);
     },
+	takeGetRegionBaseData(data, errorback) {
+	    return request._get('/shop/setting.region/add', data, errorback);
+	},
 }
 
 export default UserApi;

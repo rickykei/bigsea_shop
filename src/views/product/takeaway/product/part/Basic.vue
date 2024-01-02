@@ -70,7 +70,7 @@
     created() {
        this.formData = this.form;
       // this['formData'] = this.form;
-      console.log(this.form.category)
+      //console.log(this.form.category)
     },
     methods: {
 

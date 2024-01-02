@@ -135,7 +135,7 @@
       onSubmit: function() {
         let self = this;
         let params = self.form.model;
-        self.$refs.form.validate(valid => {
+		 self.$refs.form.validate(valid => {
           if (valid) {
             self.loading = true;
             PorductApi.takeAddProduct({
@@ -154,6 +154,7 @@
               });
           }
         });
+		 
       },
 
       /*取消*/

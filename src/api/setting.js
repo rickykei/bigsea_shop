@@ -184,6 +184,7 @@ let SettingApi = {
   editDeliver(data, errorback) {
     return request._post('/shop/setting.deliver/index', data, errorback);
   },
+  
 }
 
 export default SettingApi;

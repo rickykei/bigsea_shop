@@ -19,6 +19,8 @@
         <el-form-item><el-button type="primary" icon="Search" @click="onSubmit">查询</el-button></el-form-item>
       </el-form>
     </div>
+	<!--添加产品-->
+	<div class="common-level-rail"><el-button size="small" type="primary" icon="Plus" @click="addUserClick" v-auth="'/user/user/add'">添加會員</el-button></div>
     <!--内容-->
     <div class="product-content">
       <div class="table-wrap">
@@ -101,6 +103,11 @@ export default {
     this.getTableList();
   },
   methods: {
+	  /*打开添加*/
+	  addUserClick() { 
+	    this.$router.push('/user/user/add');
+	  },
+	  
     /*选择第几页*/
     handleCurrentChange(val) {
       let self = this;
