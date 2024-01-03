@@ -65,11 +65,13 @@
 				form: {
 					model: {
 						user:{
+								user_id: 0,
 								nickName: '',
 								mobile: '',
-						},
-						
+						}, 
 						address: {
+							address_id:0,
+							user_id:0,
 							address: '',
 							name: '',
 							phone: '',
@@ -107,7 +109,7 @@
 			/*获取region数据*/
 			getBaseData: function() {
 				let self = this;
-				UserApi.takeGetRegionBaseData({}, true)
+				UserApi.takeGetEditUserAddress({}, true)
 					.then(res => {
 						self.loading = false;
 						Object.assign(self.form, res.data);
@@ -130,7 +132,7 @@
 						//console.log('form check valid');
 						 
 						self.loading = true;
-						UserApi.addUserAddress({
+						UserApi.takeEditUserAddress({
 								params: JSON.stringify(params)
 							}, true)
 							.then(data => {

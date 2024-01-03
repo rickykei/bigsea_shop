@@ -15,11 +15,7 @@ let UserApi = {
         return request._post('/shop/user.user/add', data, errorback);
     },
 	
- /*添加用户  ricky 20240102 */
-	addUserAddress(data, errorback) {
-     return request._post('/shop/user.user/addUserAddress', data, errorback);
-	},
- 
+
     /*修改用户*/
     edituser(data, errorback) {
         return request._post('/shop/user.user/edit', data, errorback);
@@ -65,9 +61,20 @@ let UserApi = {
     EditPass(data, errorback) {
         return request._post('/shop/passport/editPass', data, errorback);
     },
+	/*添加用户  ricky 20240102 */
 	takeGetRegionBaseData(data, errorback) {
 	    return request._get('/shop/setting.region/add', data, errorback);
 	},
+	addUserAddress(data, errorback) {
+	    return request._post('/shop/user.user/addUserAddress', data, errorback);
+	},
+	takeGetEditUserAddress(data, errorback) {
+	       return request._get('/shop/user.user/editUserAddress', data, errorback);
+	},
+	takeEditUserAddress(data, errorback) {
+	       return request._post('/shop/user.user/editUserAddress', data, errorback);
+	},
+		 /*添加用户  ricky 20240102 */
 }
 
 export default UserApi;

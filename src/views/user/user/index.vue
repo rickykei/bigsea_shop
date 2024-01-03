@@ -39,6 +39,7 @@
             <template #default="scope">
               <el-button @click="addClick(scope.row)" type="text" size="small" v-auth="'/user/user/recharge'">充值</el-button>
               <el-button @click="deleteClick(scope.row)" type="text" size="small" v-auth="'/user/user/delete'">删除</el-button>
+			  <el-button @click="editClick(scope.row)" type="text" size="small" v-auth="'/user/user/edit'">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
