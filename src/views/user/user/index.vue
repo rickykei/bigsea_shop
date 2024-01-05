@@ -20,7 +20,7 @@
       </el-form>
     </div>
 	<!--添加产品-->
-	<div class="common-level-rail"><el-button size="small" type="primary" icon="Plus" @click="addUserClick" v-auth="'/user/user/add'">添加會員</el-button></div>
+	<div class="common-level-rail"><el-button size="small" type="primary" icon="Plus" @click="addUserClick" v-auth="'/user/user/addUserAddress'">添加會員</el-button></div>
     <!--内容-->
     <div class="product-content">
       <div class="table-wrap">
@@ -39,7 +39,7 @@
             <template #default="scope">
               <el-button @click="addClick(scope.row)" type="text" size="small" v-auth="'/user/user/recharge'">充值</el-button>
               <el-button @click="deleteClick(scope.row)" type="text" size="small" v-auth="'/user/user/delete'">删除</el-button>
-			  <el-button @click="editClick(scope.row)" type="text" size="small" v-auth="'/user/user/edit'">编辑</el-button>
+			  <el-button @click="editClick(scope.row)" type="text" size="small" v-auth="'/user/user/edit'">编辑</el-button> 
             </template>
           </el-table-column>
         </el-table>
@@ -106,7 +106,7 @@ export default {
   methods: {
 	  /*打开添加*/
 	  addUserClick() { 
-	    this.$router.push('/user/user/add');
+	    this.$router.push('/user/user/addUserAddress');
 	  },
 	  
     /*选择第几页*/

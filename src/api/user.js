@@ -63,7 +63,7 @@ let UserApi = {
     },
 	/*添加用户  ricky 20240102 */
 	takeGetRegionBaseData(data, errorback) {
-	    return request._get('/shop/setting.region/add', data, errorback);
+	    return request._get('/shop/user.user/addUserAddress', data, errorback);
 	},
 	addUserAddress(data, errorback) {
 	    return request._post('/shop/user.user/addUserAddress', data, errorback);
