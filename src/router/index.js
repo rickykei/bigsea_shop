@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router';
+import { createRouter, createWebHistory  } from 'vue-router';
 import {
 	setupPermissions
 } from './permissions';
@@ -38,7 +38,7 @@ export const constantRoutes = [{
 	},
 ];
 const router = createRouter({
-	history: createWebHashHistory(),
+	history: createWebHistory (),
 	routes: constantRoutes,
 });
 export function setupRouter(app) {

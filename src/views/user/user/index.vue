@@ -61,16 +61,19 @@
 
     <!--会员充值-->
     <Recharge v-if="open_add" :open_add="open_add" :form="userModel" :gradeList="gradeList" @closeDialog="closeDialogFunc($event, 'add')"></Recharge>
+	<EditUserAddress v-if="open_edit" :open_edit="open_edit" :form="userModel" :gradeList="gradeList" @closeDialog="closeDialogFunc($event, 'edit')"></EditUserAddress>
   </div>
 </template>
 
 <script>
 import UserApi from '@/api/user.js';
 import Recharge from './dialog/Recharge.vue';
+import EditUserAddress from './dialog/EditUserAddress.vue';
 export default {
   components: {
     /*编辑组件*/
-    Recharge
+    Recharge,
+	EditUserAddress,
   },
   data() {
     return {
@@ -93,6 +96,7 @@ export default {
       },
       /*是否打开添加弹窗*/
       open_add: false,
+	  open_edit: false,
       /*当前编辑的对象*/
       userModel: {},
       /*等级*/
@@ -170,6 +174,12 @@ export default {
           this.getTableList();
         }
       }
+	  if (f == 'edit') {
+	    this.open_edit = e.openDialog;
+	    if (e.type == 'success') {
+	      this.getTableList();
+	    }
+	  }
     },
 
     /*删除用户*/

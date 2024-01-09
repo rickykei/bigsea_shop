@@ -8,7 +8,7 @@ export function getStorage(name) {
   //   data = JSON.parse(sessionStorage.getItem(data))
   //   return data
   // }
-  return JSON.parse(sessionStorage.getItem(name));
+  return JSON.parse(localStorage.getItem(name));
 }
 
 /**
@@ -17,12 +17,12 @@ export function getStorage(name) {
  * @returns 
  */
 export function setStorage(data, name) {
-  return sessionStorage.setItem(name, data);
+  return localStorage.setItem(name, data);
 }
 /**
  * @description 移除
  * @returns
  */
 export function removeStorage(name) {
-  return sessionStorage.removeItem(name);
+  return localStorage.removeItem(name);
 }
