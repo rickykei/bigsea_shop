@@ -1,9 +1,5 @@
 <template>
-	<!--
-      作者：luoyiming
-      时间：2019-10-25
-      描述：订单详情
-  -->
+ 
 	<div class="pb50" v-loading="loading">
 		<div class="product-content">
 			<!--基本信息-->

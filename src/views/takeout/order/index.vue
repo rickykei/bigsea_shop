@@ -8,20 +8,20 @@
     <!--搜索表单-->
     <div class="common-seach-wrap">
       <el-form size="small" :inline="true" :model="searchForm" class="demo-form-inline">
-        <el-form-item label="订单号">
-          <el-input size="small" v-model="searchForm.order_no" placeholder="请输入订单号"></el-input>
+        <el-form-item label="訂單號">
+          <el-input size="small" v-model="searchForm.order_no" placeholder="請輸入訂單號"></el-input>
         </el-form-item>
         <el-form-item label="配送方式">
-          <el-select size="small" v-model="searchForm.style_id" placeholder="请选择">
+          <el-select size="small" v-model="searchForm.style_id" placeholder="請選擇">
             <el-option label="全部" value=""></el-option>
             <el-option v-for="(item, index) in exStyle" :key="index" :label="item.name" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="起始时间">
+        <el-form-item label="起始時間">
           <div class="block">
             <span class="demonstration"></span>
             <el-date-picker size="small" v-model="searchForm.create_time" type="daterange" value-format="YYYY-MM-DD"
-              range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+              range-separator="至" start-placeholder="開始日期" end-placeholder="結束日期"></el-date-picker>
           </div>
         </el-form-item>
         <el-form-item>
@@ -69,7 +69,7 @@
               <div class="order-code" v-if="scope.row.is_top_row">
                 <span class="state-text"
                   :class="{'state-text-red':scope.row.order_source != 10}">{{scope.row.order_source_text}}</span>
-                <span class="c_main">订单号：{{ scope.row.order_no }}</span>
+                <span class="c_main">訂單號：{{ scope.row.order_id }}</span>
                 <span class="pl16">下单时间：{{ scope.row.create_time }}</span>
                 <!--是否取消申请中-->
                 <span class="pl16" v-if="scope.row.order_status == 21">
@@ -138,8 +138,12 @@
           <el-table-column fixed="right" label="操作" width="200">
             <template #default="scope" >
               <div v-if="!scope.row.is_top_row">
-              <el-button @click="addClick(scope.row)" type="text" size="small" v-auth="'/takeout/order/detail'">订单详情
+              <el-button @click="addClick(scope.row)" type="text" size="small" v-auth="'/takeout/order/detail'">詳情
               </el-button>
+			  <el-button 
+			   v-if="scope.row.order_status.value==10"
+			   @click="editClick(scope.row)" type="text" size="small" v-auth="'/takeout/order/detail'">更改
+			  </el-button>
               <el-button
                 v-if="scope.row.order_status.value==10&&scope.row.pay_status.value==20&&scope.row.refund_money==0"
                 @click="refundClick(scope.row)" type="text" size="small" v-auth="'/takeout/Operate/refund'">退款
@@ -289,6 +293,7 @@
               let item = res.data.list.data[i];
               let topitem = {
                 order_no: item.order_no,
+				order_id: item.order_id,
                 create_time: item.create_time,
                 order_source: item.order_source,
                 order_source_text: item.order_source_text,
@@ -320,6 +325,17 @@
           }
         });
       },
+	  /*打开添加*/
+	  editClick(row) {
+	    let self = this;
+	    let params = row.order_id;
+	    self.$router.push({
+	      path: '/takeout/order/edit',
+	      query: {
+	        order_id: params
+	      }
+	    });
+	  },
       /*核销*/
       verifyClick(row) {
         let self = this;
