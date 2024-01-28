@@ -61,7 +61,7 @@
 
     <!--会员充值-->
     <Recharge v-if="open_add" :open_add="open_add" :form="userModel" :gradeList="gradeList" @closeDialog="closeDialogFunc($event, 'add')"></Recharge>
-	<EditUserAddress v-if="open_edit" :open_edit="open_edit" :form="userModel" :gradeList="gradeList" @closeDialog="closeDialogFunc($event, 'edit')"></EditUserAddress>
+	<EditUserAddress v-if="open_edit" :open_edit="open_edit" :form2="userModel"   @closeDialog="closeDialogFunc($event, 'edit')"></EditUserAddress>
   </div>
 </template>
 

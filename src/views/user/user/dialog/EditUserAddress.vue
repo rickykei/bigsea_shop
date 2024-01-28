@@ -100,9 +100,10 @@
         source: 0,
       };
     },
-    props: ['open_edit'],
+    props: ['open_edit','form2'],
     created() {
       this.dialogVisible = this.open_edit;
+	  
 	  	this.getBaseData();
     },
     methods: {
@@ -120,7 +121,9 @@
       /*获取region数据*/
       getBaseData: function() {
       	let self = this;
-      	UserApi.takeGetRegionBaseData({}, true)
+      	UserApi.takeGetEditUserAddress({
+			 user_id: self.form2.user_id,
+		}, true)
       		.then(res => {
       			self.loading = false;
       			Object.assign(self.form, res.data);

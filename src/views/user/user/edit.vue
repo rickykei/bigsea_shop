@@ -32,7 +32,7 @@
 					</el-select>
 					<span></span>
 					<el-select v-if="form.model.address.district_id!=''" v-model="form.model.address.region_id"
-						placeholder="區">
+						placeholder="區dd">
 						<el-option :label="item2.name" :value="item2.id"
 							v-for="(item2,index2) in form.region[form.model.address.province_id]['city'][form.model.address.district_id]['region']"
 							:key='index2'></el-option>

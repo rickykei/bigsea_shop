@@ -62,6 +62,7 @@
     props: ['open_add', 'form'],
     created() {
       this.dialogVisible = this.open_add;
+
     },
     methods: {
 
