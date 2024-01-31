@@ -7,41 +7,43 @@
       <el-form size="small" ref="form" :model="form" label-width="180px" :loading="loading">
       	<!--基础信息-->
       	<div class="basic-setting-content pl16 pr16">
-      		 
+      		 <el-form-item label="公司Id：" :rules="[{ required: true, message: '請填寫會員名' }]" prop="model.user.user_id">
+      		 	{{form.model.user.user_id}}
+      		 </el-form-item>
       		<el-form-item label="公司名稱：" :rules="[{ required: true, message: '請填寫會員名' }]" prop="model.user.nickName">
       			<el-input v-model="form.model.user.nickName" class="max-w460"></el-input>
       		</el-form-item>
       		<el-form-item label="公司Mobile/Tel：(login_id)" :rules="[{ required: true, message: '請填寫Mobile' }]" prop="model.user.mobile">
       			<el-input v-model="form.model.user.mobile" class="max-w460"></el-input>
       		</el-form-item>
-      		<el-form-item label="收貨人名：" :rules="[{ required: true, message: '收貨人名' }]" prop="model.address.name">
-      			<el-input v-model="form.model.address.name" class="max-w460"></el-input>
+      		<el-form-item label="收貨人名：" :rules="[{ required: true, message: '收貨人名' }]" prop="model.user.address.name">
+      			<el-input v-model="form.model.user.address.name" class="max-w460"></el-input>
       		</el-form-item>
-      		<el-form-item label="收貨人電話：" :rules="[{ required: true, message: '收貨人電話' }]" prop="model.address.phone">
-      			<el-input v-model="form.model.address.phone" class="max-w460"></el-input>
+      		<el-form-item label="收貨人電話：" :rules="[{ required: true, message: '收貨人電話' }]" prop="model.user.address.phone">
+      			<el-input v-model="form.model.user.address.phone" class="max-w460"></el-input>
       		</el-form-item>
-      		<el-form-item label="選地區" :rules="[{required: true,message: ''}]" prop="model.address.province_id">
-      			<el-select v-model="form.model.address.province_id" placeholder="省" @change="initCity">
-      				<el-option :label="item.name" :value="item.id" v-for="(item,index) in form.region"
+      		<el-form-item label="選地區" :rules="[{required: true,message: ''}]" prop="model.user.address.province_id">
+      			<el-select v-model="form.model.user.address.province_id" placeholder="省" @change="initCity">
+      				<el-option :label="item.name" :value="item.id" v-for="(item,index) in form.model.region"
       					:key='index'></el-option>
       			</el-select>
       			<span></span>
-      			<el-select v-if="form.model.address.province_id!=''" v-model="form.model.address.district_id"
+      			<el-select v-if="form.model.user.address.province_id!=''" v-model="form.model.user.address.district_id"
       				placeholder="港九" @change="initRegion">
       				<el-option :label="item1.name" :value="item1.id"
-      					v-for="(item1,index1) in form.region[form.model.address.province_id]['city']"
+      					v-for="(item1,index1) in form.model.region[form.model.user.address.province_id]['city']"
       					:key='index1'></el-option>
       			</el-select>
       			<span></span>
-      			<el-select v-if="form.model.address.district_id!=''" v-model="form.model.address.region_id"
+      			<el-select v-if="form.model.user.address.district_id!=''" v-model="form.model.user.address.region_id"
       				placeholder="區">
       				<el-option :label="item2.name" :value="item2.id"
-      					v-for="(item2,index2) in form.region[form.model.address.province_id]['city'][form.model.address.district_id]['region']"
+      					v-for="(item2,index2) in form.model.region[form.model.user.address.province_id]['city'][form.model.user.address.district_id]['region']"
       					:key='index2'></el-option>
       			</el-select>
       		</el-form-item>
-      		<el-form-item label="地址：" :rules="[{ required: true, message: '地址' }]" prop="model.address.address">
-      			<el-input v-model="form.model.address.address" class="max-w460"></el-input>
+      		<el-form-item label="地址：" :rules="[{ required: true, message: '地址' }]" prop="model.user.address.address">
+      			<el-input v-model="form.model.user.address.address" class="max-w460"></el-input>
       		</el-form-item>
       
       	</div>
@@ -79,31 +81,29 @@
         form: {
         	model: {
         		user:{
+						user_id: '',
         				nickName: '',
         				mobile: '',
-        		},
-        		
-        		address: {
-        			address: '',
-        			name: '',
-        			phone: '',
-        			district_id: '',
-        			province_id: '',
-        			region_id: '',
-        
-        		},
-        
-        
+						address: {
+							address_id: '',
+							name: '',
+							phone: '',
+							province_id:'',
+							district_id: '',
+							region_id: '',
+						    address:'',
+						}, 
+        		},  
+				region: [],
         	},
-        	region: [],
+        	
         },  
         source: 0,
       };
     },
     props: ['open_edit','form2'],
     created() {
-      this.dialogVisible = this.open_edit;
-	  
+      this.dialogVisible = this.open_edit; 
 	  	this.getBaseData();
     },
     methods: {
@@ -113,10 +113,10 @@
         this.source = tab.index;
       },
       initCity() {
-      	this.form.model.address.city_id = ''
+      	this.form.model.user.address.district_id = ''
       },
       initRegion() {
-      	this.form.model.address.region_id = ''
+      	this.form.model.user.address.region_id = ''
       },
       /*获取region数据*/
       getBaseData: function() {
@@ -126,9 +126,10 @@
 		}, true)
       		.then(res => {
       			self.loading = false;
-      			Object.assign(self.form, res.data);
-      			//		console.log("------");
-      			//	console.log(self.form.region['1']['city']);
+      			Object.assign(self.form.model, res.data);
+			 
+      			 	//	console.log("------");
+      			 //	console.log(self.form.region['1']['city']);
       		})
       		.catch(error => {
       			self.loading = false;
