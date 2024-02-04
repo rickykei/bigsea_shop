@@ -55,7 +55,7 @@
     <template #footer>
     <div class="dialog-footer">
       <el-button @click="dialogFormVisible">取 消</el-button>
-      <el-button type="primary" @click="addUser(form.user_id)" :loading="loading">确 定</el-button>
+      <el-button type="primary"  @click="onSubmit"  :loading="loading">提交</el-button>
     </div>
     </template>
   </el-dialog>
@@ -135,6 +135,34 @@
       			self.loading = false;
       		});
       },
+/*提交*/
+			onSubmit: function() {
+				let self = this;
+				let params = self.form.model;
+				self.$refs.form.validate(valid => { 
+					if (valid) {
+						//console.log('form check valid');
+						self.loading = true;
+						UserApi.takeEditUserAddress({
+								user_id: self.form2.user_id,
+								params: JSON.stringify(params)
+							}, true)
+							.then(data => {
+								self.loading = false;
+								ElMessage({
+									message: '更改用戶及地址成功',
+									type: 'success'
+								});
+								self.dialogFormVisible(true);
+								self.$router.push('/user/user/index');
+							})
+							.catch(error => {
+								self.loading = false;
+							});
+							 
+					}
+				});
+			},
 
       /*关闭弹窗*/
       dialogFormVisible(e) {
