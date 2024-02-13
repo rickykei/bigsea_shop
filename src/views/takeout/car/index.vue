@@ -132,6 +132,7 @@
 		else
 		 this.pdfUrl = baseUrl + '/index.php/shop/takeout.car/export?' + qs.stringify(this.searchForm);
 	   
+	   console.log(this.pdfUrl);
 		return downloadPdf(this.pdfUrl);
       },
      

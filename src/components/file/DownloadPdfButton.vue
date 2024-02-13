@@ -4,7 +4,7 @@ export default function useDownloadPdf() {
     const link = document.createElement('a');
     link.href = pdfUrl;
     link.target = '_blank';
-    link.download = 'my-pdf-file.pdf';
+   // link.download = 'my-pdf-file.pdf';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

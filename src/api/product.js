@@ -60,6 +60,7 @@ let ProductApi = {
     storeProductList(data, errorback) {
         return request._post('/shop/product.store.product/index', data, errorback);
     },
+   
 
     /*产品选择列表*/
     takeChooseLists(data, errorback) {

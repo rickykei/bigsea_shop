@@ -1,5 +1,5 @@
 <template>
- 
+  <el-form size="small" ref="form" :model="form" label-width="180px" :loading="loading">
 	<div class="pb50" v-loading="loading">
 		<div class="product-content">
 			<!--基本信息-->
@@ -9,93 +9,93 @@
 					<el-col :span="5">
 						<div class="pb16">
 							<span class="gray9">訂單號：</span>
-							{{ detail.order_id }}
+							{{ form.detail.order_id }}
 						</div>
 					</el-col>
 					<el-col :span="5">
 						<div class="pb16">
 							<span class="gray9">買家：</span>
-							{{ detail.user.nickName }}
-							<span>用户ID：({{ detail.user.user_id }})</span>
+							{{ form.detail.user.nickName }}
+							<span>用户ID：({{ form.detail.user.user_id }})</span>
 						</div>
 					</el-col>
 					<el-col :span="5">
 						<div class="pb16">
 							<span class="gray9">訂單金額 (元)：</span>
-							{{ detail.order_price }}
+							{{ form.detail.order_price }}
 						</div>
 					</el-col>
-					<el-col :span="5" v-if="detail.express_price > 0">
+					<el-col :span="5" v-if="form.detail.express_price > 0">
 						<div class="pb16">
 							<span class="gray9">配送费 (元)：</span>
-							{{ detail.express_price }}
+							{{ form.detail.express_price }}
 						</div>
 					</el-col>
-					<el-col :span="5" v-if="detail.bag_price > 0">
+					<el-col :span="5" v-if="form.detail.bag_price > 0">
 						<div class="pb16">
 							<span class="gray9">包装费 (元)：</span>
-							{{ detail.bag_price }}
+							{{ form.detail.bag_price }}
 						</div>
 					</el-col>
 					<el-col :span="5">
-						<div class="pb16" v-if="detail.coupon_money > 0">
+						<div class="pb16" v-if="form.detail.coupon_money > 0">
 							<span class="gray9">优惠券抵扣 (元)：</span>
-							{{ detail.coupon_money }}
+							{{ form.detail.coupon_money }}
 						</div>
 					</el-col>
 					<el-col :span="5">
-						<div class="pb16" v-if="detail.points_money > 0">
+						<div class="pb16" v-if="form.detail.points_money > 0">
 							<span class="gray9">积分抵扣 (元)：</span>
-							{{ detail.points_money }}
+							{{ form.detail.points_money }}
 						</div>
 					</el-col>
 					<el-col :span="5">
-						<div class="pb16" v-if="detail.fullreduce_money > 0">
+						<div class="pb16" v-if="form.detail.fullreduce_money > 0">
 							<span class="gray9">满减金额 (元)：</span>
-							{{ detail.fullreduce_money }}
+							{{ form.detail.fullreduce_money }}
 						</div>
 					</el-col>
 					<el-col :span="5">
 						<div class="pb16">
 							<span class="gray9">实付款金额 (元)：</span>
-							{{ detail.pay_price }}
+							{{ form.detail.pay_price }}
 						</div>
 					</el-col>
 					<el-col :span="5">
 						<div class="pb16">
 							<span class="gray9">支付方式：</span>
-							{{ detail.pay_type.text }}
+							{{ form.detail.pay_type.text }}
 						</div>
 					</el-col>
 					<el-col :span="5">
 						<div class="pb16">
 							<span class="gray9">配送方式：</span>
-							{{ detail.delivery_type.text }}
+							{{ form.detail.delivery_type.text }}
 						</div>
 					</el-col>
 					<el-col :span="5">
 						<div class="pb16">
 							<span class="gray9">配送状态：</span>
-							{{ detail.deliver_text }}
+							{{ form.detail.deliver_text }}
 						</div>
 					</el-col>
 					<el-col :span="5">
 						<div class="pb16">
-							<span class="gray9" v-if="detail.delivery_type.value==10">配送时间：</span>
-							<span class="gray9" v-if="detail.delivery_type.value==20">取餐时间：</span>
-							{{ detail.mealtime}}
+							<span class="gray9" v-if="form.detail.delivery_type.value==10">配送时间：</span>
+							<span class="gray9" v-if="form.detail.delivery_type.value==20">取餐时间：</span>
+							{{ form.detail.mealtime}}
 						</div>
 					</el-col>
 					<el-col :span="5">
 						<div class="pb16">
 							<span class="gray9">交易状态：</span>
-							{{ detail.order_status.text }}
+							{{ form.detail.order_status.text }}
 						</div>
 					</el-col>
 					<el-col :span="5"
-						v-if="detail['pay_status']['value'] == 10 && detail['order_status']['value'] == 10 && detail['order_source'] == 10"
+						v-if="form.detail['pay_status']['value'] == 10 && form.detail['order_status']['value'] == 10 && form.detail['order_source'] == 10"
 						v-auth="'/takeout/order/updatePrice'">
-						<el-button @click="editClick(detail)" size="small">修改价格</el-button>
+						<el-button @click="editClick(form.detail)" size="small">修改价格</el-button>
 					</el-col>
 				</el-row>
 			</div>
@@ -106,72 +106,93 @@
 					<el-col :span="5">
 						<div class="pb16">
 							<span class="gray9">门店名称：</span>
-							{{ detail.supplier.name }}
+							{{ form.detail.supplier.name }}
 						</div>
 					</el-col>
 				</el-row>
 			</div>
 			<!--商品信息-->
 			<div class="common-form mt16">商品信息</div>
+			<div class="p-0-30 mb18">
+			  <div class="d-s-c"> 添加商品: <div class="blue ml30" @click="addProdRow">添加商品+</div>
+			  </div>
+			</div>
 			<div class="table-wrap">
-				<el-table size="small" :data="detail.product" border style="width: 100%">
-					<el-table-column prop="product_name" label="商品" width="400">
+				<el-table size="small" :data="form.detail.product" border style="width: 100%">
+					// ricky add del 20240211
+					<el-table-column prop="product_id" label="刪去" width="50">
 						<template #default="scope">
+							<el-button class='mr16 mb20' size="mini" icon="Delete" circle @click="delIndex(scope.$index)"></el-button>
+						</template>
+					</el-table-column>
+					<el-table-column prop="product_name" label="商品" width="400">
+						<template #default="scope"> 
 							<div class="product-info">
-								<div class="pic"><img v-img-url="scope.row.image.file_path" /></div>
-								<div class="info">
-									<div class="name">{{ scope.row.product_name }}</div>
-									<div class="gray9" v-if="scope.row.product_attr!=''">{{scope.row.product_attr}}
-									</div>
-									<div class="orange" v-if="scope.row.refund">
-										{{ scope.row.refund.type.text }}-{{ scope.row.refund.status.text }}
-									</div>
+								 <div class="info">
+									  
+										<div class="name">	
+											<el-select v-model="scope.row.category_id" placeholder="分類" @change="changeCat($event,scope.$index)">
+													<el-option :label="item.name" :value="item.category_id" 
+													v-for="(item,index) in form.category" :key='index'>
+													</el-option>
+											</el-select>
+											
+											<el-select v-if="scope.row.category_id!=''" v-model="scope.row.product_id" placeholder="產品名"
+											@change="changeProd($event,scope.$index,scope.row.category_id)" >
+												<el-option :label="item1.product_name" :value="item1.product_id"
+													v-for="item1 in form.category[scope.row.category_id]['products']"
+													:key='item1.product_id'>
+												</el-option>
+											</el-select> 
+									 
+									  </div>
 									<div class="price">
 										<span
-											:class="{'text-d-line':scope.row.is_user_grade==1,'gray6':scope.row.is_user_grade!=1}">￥
+											:class="{'text-d-line':scope.row.is_user_grade==1,'gray6':scope.row.is_user_grade!=1}">$
 											{{ scope.row.line_price }}</span>
 										<span class="ml10" v-if="scope.row.is_user_grade==1">
-											会员折扣价：￥ {{ scope.row.grade_product_price }}
+											会员折扣价：$ {{ scope.row.grade_product_price }}
 										</span>
 									</div>
+								
 								</div>
 							</div>
 						</template>
 					</el-table-column>
-					<el-table-column prop="total_num" label="购买数量">
+					<el-table-column prop="total_num" label="數量">
 						<template #default="scope">
 							<p>x {{ scope.row.total_num }}</p>
 						</template>
 					</el-table-column>
-					<el-table-column prop="total_price" label="商品总价(元)">
+					<el-table-column prop="total_price" label="商品總價(元)">
 						<template #default="scope">
-							<p>￥ {{ scope.row.total_price }}</p>
+							<p>$ {{ scope.row.total_price }}</p>
 						</template>
 					</el-table-column>
 				</el-table>
 			</div>
 
 			<!--收货信息-->
-			<div v-if="detail.delivery_type.value == 10">
+			<div v-if="form.detail.delivery_type.value == 10">
 				<div class="common-form mt16">配送信息</div>
 				<div class="table-wrap">
 					<el-row>
 						<el-col :span="5">
 							<div class="pb16">
 								<span class="gray9">联系人：</span>
-								{{ detail.address.name }}
+								{{ form.detail.address.name }}
 							</div>
 						</el-col>
 						<el-col :span="5">
 							<div class="pb16">
 								<span class="gray9">联系电话：</span>
-								{{ detail.address.phone }}
+								{{ form.detail.address.phone }}
 							</div>
 						</el-col>
 						<el-col :span="9">
 							<div class="pb16">
 								<span class="gray9">联系地址：</span>
-								{{ detail.address.detail }}{{ detail.address.address }}
+								{{ form.detail.address.detail }}{{ form.detail.address.address }}
 							</div>
 						</el-col>
 					</el-row>
@@ -179,7 +200,7 @@
 						<el-col :span="25">
 							<div class="pb16">
 								<span class="gray9">备注：</span>
-								{{ detail.buyer_remark }}
+								{{ form.detail.buyer_remark }}
 							</div>
 						</el-col>
 					</el-row>
@@ -187,14 +208,14 @@
 			</div>
 
 			<!--自提门店信息-->
-			<template v-if="detail.delivery_type.value == 20">
+			<template v-if="form.detail.delivery_type.value == 20">
 				<div class="common-form mt16">自提用户信息</div>
-				<div class="table-wrap" v-if="detail.extract">
+				<div class="table-wrap" v-if="form.detail.extract">
 					<el-row>
 						<el-col :span="5">
 							<div class="pb16">
 								<span class="gray9">联系电话：</span>
-								{{ detail.extract.phone }}
+								{{ form.detail.extract.phone }}
 							</div>
 						</el-col>
 					</el-row>
@@ -202,7 +223,7 @@
 						<el-col :span="25">
 							<div class="pb16">
 								<span class="gray9">备注：</span>
-								{{ detail.buyer_remark }}
+								{{ form.detail.buyer_remark }}
 							</div>
 						</el-col>
 					</el-row>
@@ -210,44 +231,44 @@
 			</template>
 
 			<!--付款信息-->
-			<div class="table-wrap" v-if="detail.pay_status.value == 20">
+			<div class="table-wrap" v-if="form.detail.pay_status.value == 20">
 				<div class="common-form mt16">付款信息</div>
 				<div class="table-wrap">
 					<el-row>
 						<el-col :span="5">
 							<div class="pb16">
 								<span class="gray9">应付款金额：</span>
-								{{ detail.pay_price }}
+								{{ form.detail.pay_price }}
 							</div>
 						</el-col>
 						<el-col :span="5">
 							<div class="pb16">
 								<span class="gray9">支付方式：</span>
-								{{ detail.pay_type.text }}
+								{{ form.detail.pay_type.text }}
 							</div>
 						</el-col>
 						<el-col :span="5">
 							<div class="pb16">
 								<span class="gray9">支付流水号：</span>
-								{{ detail.transaction_id }}
+								{{ form.detail.transaction_id }}
 							</div>
 						</el-col>
 						<el-col :span="5">
 							<div class="pb16">
 								<span class="gray9">付款状态：</span>
-								{{ detail.pay_status.text }}
+								{{ form.detail.pay_status.text }}
 							</div>
 						</el-col>
 						<el-col :span="5">
 							<div class="pb16">
 								<span class="gray9">付款时间：</span>
-								{{ detail.pay_time }}
+								{{ form.detail.pay_time }}
 							</div>
 						</el-col>
 						<el-col :span="5" v-if="detail.refund_money>0">
 							<div class="pb16">
 								<span class="gray9">退款金额：</span>
-								{{ detail.refund_money }}
+								{{ form.detail.refund_money }}
 							</div>
 						</el-col>
 					</el-row>
@@ -255,7 +276,7 @@
 			</div>
 
 			<!--发货信息-->
-			<div v-if="detail.delivery_type.value == 10">
+			<div v-if="form.detail.delivery_type.value == 10">
 				<div>
 					<div class="common-form mt16">发货信息</div>
 					<div class="table-wrap">
@@ -263,7 +284,7 @@
 							<el-col :span="5">
 								<div class="pb16">
 									<span class="gray9">发货状态：</span>
-									{{ detail.delivery_status.text }}
+									{{ form.detail.delivery_status.text }}
 								</div>
 							</el-col>
 						</el-row>
@@ -272,14 +293,14 @@
 			</div>
 
 			<!--取消信息-->
-			<div class="table-wrap" v-if="detail.order_status.value == 20 && detail.cancel_remark != ''">
+			<div class="table-wrap" v-if="form.detail.order_status.value == 20 && form.detail.cancel_remark != ''">
 				<div class="common-form mt16">取消信息</div>
 				<div class="table-wrap">
 					<el-row>
 						<el-col :span="5">
 							<div class="pb16">
 								<span class="gray9">商家备注：</span>
-								{{ detail.cancel_remark }}
+								{{ form.detail.cancel_remark }}
 							</div>
 						</el-col>
 					</el-row>
@@ -288,7 +309,7 @@
 
 			<!--门店自提核销-->
 			<div
-				v-if="detail.delivery_type.value == 20 && detail.pay_status.value == 20 && detail.order_status.value != 21 && detail.order_status.value != 20">
+				v-if="form.detail.delivery_type.value == 20 && form.detail.pay_status.value == 20 && form.detail.order_status.value != 21 && form.detail.order_status.value != 20">
 				<div class="common-form mt16">门店自提核销</div>
 				<div class="table-wrap">
 					<template>
@@ -296,7 +317,7 @@
 							<el-col :span="5">
 								<div class="pb16">
 									<span class="gray9">核销状态：</span>
-									<template v-if="detail.delivery_status.value == 20">
+									<template v-if="form.detail.delivery_status.value == 20">
 										已核销
 									</template>
 									<template v-else>
@@ -304,10 +325,10 @@
 									</template>
 								</div>
 							</el-col>
-							<el-col :span="5" v-if="detail.delivery_time">
+							<el-col :span="5" v-if="form.detail.delivery_time">
 								<div class="pb16">
 									<span class="gray9">核销时间：</span>
-									{{ detail.delivery_time }}
+									{{ form.detail.delivery_time }}
 								</div>
 							</el-col>
 						</el-row>
@@ -319,13 +340,13 @@
 			<el-button size="small" type="info" @click="cancelFunc">返回上一页</el-button>
 		</div>
 	</div>
+	</el-form>
 </template>
 
 <script>
 	import OrderApi from '@/api/order.js';
-	import {
-		deepClone,
-	} from '@/utils/base.js';
+	 
+	import { deepClone, } from '@/utils/base.js';
 	export default {
 		components: {},
 		data() {
@@ -334,21 +355,28 @@
 				/*是否加载完成*/
 				loading: true,
 				/*订单数据*/
-				detail: {
-					order_id: 0,
-					pay_status: [],
-					pay_type: [],
-					delivery_type: [],
-					user: {},
-					address: [],
-					product: [],
-					order_status: [],
-					extract: [],
-					delivery_status: [],
-					supplier: {
-						name: ''
-					}
+				form: {
+					detail: {
+						order_id: 0,
+						pay_status: [],
+						pay_type: [],
+						delivery_type: [],
+						user: {},
+						address: [],
+						new_address: [],
+						product: [],
+						new_product: [],
+						order_status: [],
+						extract: [],
+						delivery_status: [],
+						supplier: {
+							name: ''
+						}
+					},
+					category: {},
 				},
+				user_data: {},
+				 
 			};
 		},
 		created() {
@@ -356,6 +384,43 @@
 			this.getParams();
 		},
 		methods: {
+			addProdRow() {
+			  if (this.form.detail.product == '') {
+			    this.form.detail.product = []
+			  }
+			  this.form.detail.product.push({
+			    product_name: '',
+			    product_id: 94,
+				category_id: 0,
+				line_price:0,
+				product_price:0,
+				total_price:0,
+				total_pay_price:0,
+				total_num:1,
+			  })
+			},
+			changeCat(selCatId,index){
+				 
+				//alert(item);
+				//this.form.detail.product[pid].product_id=item.product_id;
+				//this.form.detail.product[pid].line_price=item.line_price;
+				//this.form.detail.product[pid].product_name=item.product_name;
+			},
+			changeProd(selProdId,index,catId){
+			 
+				this.form.detail.product[index].product_id=this.form.category[catId].products[selProdId].product_id;
+				this.form.detail.product[index].line_price=this.form.category[catId].products[selProdId].line_price;
+				this.form.detail.product[index].product_price=this.form.category[catId].products[selProdId].product_price;
+				this.form.detail.product[index].product_name=this.form.category[catId].products[selProdId].product_name;
+				this.form.detail.product[index].total_price=this.form.category[catId].products[selProdId].line_price*this.form.detail.product[index].total_num;
+				this.form.detail.product[index].total_pay_price=this.form.detail.product[index].total_price;
+				 
+			},
+			delIndex(n) {
+			 
+			  //this.form.model.product_attr.splice(n, 1);
+			  this.form.detail.product.splice(n,1);
+			},
 			next() {
 				if (this.active++ > 4) this.active = 0;
 			},
@@ -371,11 +436,13 @@
 					)
 					.then(data => {
 						self.loading = false;
-						self.detail = data.data.detail;
+						self.form = data.data;
 					})
 					.catch(error => {
 						self.loading = false;
 					});
+					
+			 
 			},
 			/*取消*/
 			cancelFunc() {
