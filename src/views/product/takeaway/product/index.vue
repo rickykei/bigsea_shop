@@ -152,7 +152,7 @@ export default {
       PorductApi.takeProductList(Params, true)
         .then(data => {
           self.loading = false;
-          self.tableData = data.data.list.data;
+          self.tableData = data.data.list.data;  
           self.categoryList = data.data.category;
           self.totalDataNumber = data.data.list.total;
           self.product_count = data.data.product_count;
@@ -160,6 +160,7 @@ export default {
         .catch(error => {
           self.loading = false;
         });
+		console.log(self.tableData);
     },
 
     /*搜索查询*/

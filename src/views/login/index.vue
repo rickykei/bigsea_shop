@@ -3,9 +3,7 @@
     <div>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-position="left" label-width="0px"
         class="demo-ruleForm login-container d-b-c">
-        <div class="log_img">
-          <img :src="log_url">
-        </div>
+      
         <div class="flex-1 login-box">
           <h3 class="title" style="margin-bottom: 20px;">{{shop_name}}</h3>
           <!--用户名-->
@@ -69,11 +67,11 @@
       const validateVerifycode = (rule, value, callback) => {
         if (value === "") {
           this.refreshCode();
-          callback(new Error('请输入验证码'))
+          callback(new Error('請入驗証碼'))
         } else if (value !== this.identifyCode) {
-          console.log('验证码:', value);
+          console.log('驗証碼:', value);
           this.refreshCode();
-          callback(new Error('验证码不正确!'))
+          callback(new Error('驗証碼錯!'))
         } else {
           callback()
         }

@@ -9,7 +9,7 @@
 				</div>
 			</div>
 			<div class="d-c-c">
-				<span class="p-10-0 blue fb tc">{{ userInfo.shop_name || '点餐系统连锁总店'}}</span>
+				<span class="p-10-0 blue fb tc">{{ userInfo.shop_name || '大海總店'}}</span>
 			</div>
 			<div class="nav-wrapper mt10">
 				<div class="first-menu-content">

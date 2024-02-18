@@ -67,25 +67,15 @@
 							{{ form.detail.pay_type.text }}
 						</div>
 					</el-col>
-					<el-col :span="5">
-						<div class="pb16">
-							<span class="gray9">配送方式：</span>
-							{{ form.detail.delivery_type.text }}
-						</div>
-					</el-col>
+					
+					
 					<el-col :span="5">
 						<div class="pb16">
 							<span class="gray9">配送状态：</span>
 							{{ form.detail.deliver_text }}
 						</div>
 					</el-col>
-					<el-col :span="5">
-						<div class="pb16">
-							<span class="gray9" v-if="form.detail.delivery_type.value==10">配送时间：</span>
-							<span class="gray9" v-if="form.detail.delivery_type.value==20">取餐时间：</span>
-							{{ form.detail.mealtime}}
-						</div>
-					</el-col>
+				
 					<el-col :span="5">
 						<div class="pb16">
 							<span class="gray9">交易状态：</span>
@@ -97,6 +87,42 @@
 						v-auth="'/takeout/order/updatePrice'">
 						<el-button @click="editClick(form.detail)" size="small">修改价格</el-button>
 					</el-col>
+					<el-col :span="5">
+						<div class="pb16">
+							<span class="gray9">配送方式：</span>
+							{{ form.detail.delivery_type.text }}
+						</div>
+					</el-col>
+					<el-col :span="5">
+						<div class="pb16">
+							<span class="gray9">車：</span>
+							<el-select v-model="form.detail.table_no" placeholder="車" @change="">
+									<el-option :label="item.label" :value="item.id" 
+									v-for="(item,index) in car_array" :key='index'>
+									</el-option>
+							</el-select>
+							 
+						</div>
+					</el-col>
+					<el-col :span="50"> 
+					<div class="pb16">
+							<span class="gray9">提貨時間：</span>
+						  
+						      <el-date-picker size="small" v-model="create_time" type="date" value-format="YYYY-MM-DD" ></el-date-picker>
+						  </div>
+					</el-col>
+					<el-col :span="5"><div class="pb16">
+						<span class="gray9">上午下午：</span>
+						 
+							  
+								<el-select size="small" v-model="ampm" placeholder="请选择">
+								  <el-option v-for="(item, index) in ampm_range" :key="index" :label="item.label" :value="item.id">
+								  </el-option>
+								</el-select>
+							 </div>
+						 
+					</el-col>
+					
 				</el-row>
 			</div>
 			<!--商户信息-->
@@ -125,7 +151,7 @@
 							<el-button class='mr16 mb20' size="mini" icon="Delete" circle @click="delIndex(scope.$index)"></el-button>
 						</template>
 					</el-table-column>
-					<el-table-column prop="product_name" label="商品" width="400">
+					<el-table-column prop="product_name" label="商品" width="450">
 						<template #default="scope"> 
 							<div class="product-info">
 								 <div class="info">
@@ -144,16 +170,14 @@
 													:key='item1.product_id'>
 												</el-option>
 											</el-select> 
-									 
+									 <span
+									 	:class="{'text-d-line':scope.row.is_user_grade==1,'gray6':scope.row.is_user_grade!=1}">$
+									 	{{ scope.row.line_price }}</span>
+									 <span class="ml10" v-if="scope.row.is_user_grade==1">
+									 	会员折扣价：$ {{ scope.row.grade_product_price }}
+									 </span>
 									  </div>
-									<div class="price">
-										<span
-											:class="{'text-d-line':scope.row.is_user_grade==1,'gray6':scope.row.is_user_grade!=1}">$
-											{{ scope.row.line_price }}</span>
-										<span class="ml10" v-if="scope.row.is_user_grade==1">
-											会员折扣价：$ {{ scope.row.grade_product_price }}
-										</span>
-									</div>
+								
 								
 								</div>
 							</div>
@@ -161,7 +185,7 @@
 					</el-table-column>
 					<el-table-column prop="total_num" label="數量">
 						<template #default="scope">
-							<p>x {{ scope.row.total_num }}</p>
+							<p>x <el-input type="number" v-model="scope.row.total_num" style="width:10%"></el-input> </p>
 						</template>
 					</el-table-column>
 					<el-table-column prop="total_price" label="商品總價(元)">
@@ -374,9 +398,13 @@
 						}
 					},
 					category: {},
+					
 				},
 				user_data: {},
-				 
+				create_time: '',
+				ampm: '',
+				 car_array:  [{label:'YR897',id:'YR897'},{label:'YG5976',id:'YG5976'},{label:'自提',id:'selfpick'}],
+				 ampm_range: [{label: '上午',id:'09:00'},{label:'下午',id: '14:00'}],
 			};
 		},
 		created() {
@@ -437,6 +465,8 @@
 					.then(data => {
 						self.loading = false;
 						self.form = data.data;
+						self.ampm = self.form.detail.mealtime.substr(-5, 5);
+						self.create_time = self.form.detail.mealtime.substr(0, 10);
 					})
 					.catch(error => {
 						self.loading = false;

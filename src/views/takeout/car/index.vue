@@ -21,7 +21,12 @@
             <el-date-picker size="small" v-model="searchForm.create_time" type="date" value-format="YYYY-MM-DD" ></el-date-picker>
           </div>
         </el-form-item>
-  
+	  <el-form-item label="上午下午">
+		<el-select size="small" v-model="searchForm.ampm" placeholder="请选择">
+		  <el-option v-for="(item, index) in ampm_range" :key="index" :label="item.label" :value="item.id">
+		  </el-option>
+		</el-select>
+	  </el-form-item>
         <el-form-item>
           <el-button size="small" target="_blank" @click.stop="downloadPdf2()" > 
 		PDF
@@ -56,7 +61,8 @@
         searchForm: {
           car_no: '',
           deliver_source: '',
-          create_time: ''
+          create_time: '',
+		  ampm: '09:00',
         },
         /*时间*/
         create_time: '',
@@ -66,6 +72,7 @@
         car_no: 0,
         deliver_id: 0,
         deliver_source: [{label:'YR897',id:'YR897'},{label:'YG5976',id:'YG5976'},{label:'自提',id:'PICK'}],
+		ampm_range: [{label: '上午',id:'09:00'},{label:'下午',id: '14:00'}],
 		token,
       };
     },
