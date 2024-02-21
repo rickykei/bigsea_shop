@@ -141,7 +141,7 @@
               <el-button @click="addClick(scope.row)" type="text" size="small" v-auth="'/takeout/order/detail'">詳情
               </el-button>
 			  <el-button 
-			   v-if="scope.row.order_status.value==10"
+			   v-if="scope.row.order_status.value==10&&scope.row.pay_status.value==10"
 			   @click="editClick(scope.row)" type="text" size="small" v-auth="'/takeout/order/detail'">更改
 			  </el-button>
               <el-button

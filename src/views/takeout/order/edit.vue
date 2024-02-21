@@ -185,7 +185,7 @@
 					</el-table-column>
 					<el-table-column prop="total_num" label="數量">
 						<template #default="scope">
-							<p>x <el-input type="number" v-model="scope.row.total_num" style="width:10%"></el-input> </p>
+							<p>x <el-input type="number" v-model="scope.row.total_num" style="width:50%" @change="calTotal"></el-input> </p>
 						</template>
 					</el-table-column>
 					<el-table-column prop="total_price" label="商品總價(元)">
@@ -412,6 +412,17 @@
 			this.getParams();
 		},
 		methods: {
+			calTotal(){
+				 
+				this.form.detail.order_price=this.form.detail.product.reduce(
+					(total,item)=>{
+						item.total_price=item.line_price * item.total_num;
+						return total + item.total_price;
+						
+						},
+					0
+					); 
+			},
 			addProdRow() {
 			  if (this.form.detail.product == '') {
 			    this.form.detail.product = []
@@ -442,7 +453,7 @@
 				this.form.detail.product[index].product_name=this.form.category[catId].products[selProdId].product_name;
 				this.form.detail.product[index].total_price=this.form.category[catId].products[selProdId].line_price*this.form.detail.product[index].total_num;
 				this.form.detail.product[index].total_pay_price=this.form.detail.product[index].total_price;
-				 
+				this.calTotal();
 			},
 			delIndex(n) {
 			 
