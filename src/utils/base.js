@@ -165,3 +165,28 @@ export const formatModel = (thisObj, sourceObj) => {
 	}
 	return thisObj;
 }
+ export const formatModel2 = (thisObj, sourceObj) => {
+	let retObj={ ...thisObj };
+	for (var key in thisObj) {
+ 		if (sourceObj && typeof (sourceObj[key]) != 'undefined') {
+ 			if (thisObj[key] && Object.prototype.toString.call(thisObj[key]) === "[object Object]") {
+				retObj=formatModel2(thisObj[key], sourceObj[key]);
+ 			} else if (Array.isArray(thisObj[key])){ 
+				 var a={};
+				 var b=[];
+				for (const item of sourceObj[key]){
+					console.log('hello item '+item.product_id+item.order_product_id);
+					a=formatModel2(thisObj[key][0], item);
+					b.push(a);
+				}
+				retObj[key]=b;
+			} else { 
+				retObj[key] = sourceObj[key];
+ 			}
+			
+ 		}
+		
+ 	}
+ 	return retObj;
+ }
+  

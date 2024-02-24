@@ -360,17 +360,18 @@
 				</div>
 			</div>
 		</div>
+		<!--提交-->
 		<div class="common-button-wrapper">
-			<el-button size="small" type="info" @click="cancelFunc">返回上一页</el-button>
+		  <el-button size="small" type="info" @click="cancelFunc">取消</el-button>
+		  <el-button size="small" type="primary" @click="onSubmit" :loading="loading">发布</el-button>
 		</div>
 	</div>
 	</el-form>
 </template>
 
 <script>
-	import OrderApi from '@/api/order.js';
-	 
-	import { deepClone, } from '@/utils/base.js';
+	import OrderApi from '@/api/order.js';  
+	import { deepClone,formatModel2 } from '@/utils/base.js';
 	export default {
 		components: {},
 		data() {
@@ -388,8 +389,7 @@
 						user: {},
 						address: [],
 						new_address: [],
-						product: [],
-						new_product: [],
+						product: [], 
 						order_status: [],
 						extract: [],
 						delivery_status: [],
@@ -405,6 +405,21 @@
 				ampm: '',
 				 car_array:  [{label:'YR897',id:'YR897'},{label:'YG5976',id:'YG5976'},{label:'自提',id:'selfpick'}],
 				 ampm_range: [{label: '上午',id:'09:00'},{label:'下午',id: '14:00'}],
+				 /*模型数据*/
+				 model: {
+				  order_id: 0,
+				  user_id: 0,
+				  total_price: 0,
+				  order_price: 0,
+				  pay_price: 0,
+				  table_no: '',
+				  mealtime: '',
+				  product: [{
+				  	order_product_id: 0,
+				  	product_id: 0,
+				  	total_num: 0, 
+				  }],
+				 },
 			};
 		},
 		created() {
@@ -417,11 +432,13 @@
 				this.form.detail.order_price=this.form.detail.product.reduce(
 					(total,item)=>{
 						item.total_price=item.line_price * item.total_num;
+						
 						return total + item.total_price;
 						
 						},
 					0
 					); 
+				this.form.detail.pay_price=	this.form.detail.order_price;
 			},
 			addProdRow() {
 			  if (this.form.detail.product == '') {
@@ -485,10 +502,47 @@
 					
 			 
 			},
+			/*提交*/
+			onSubmit: function() {
+			  let self = this;
+			  let params = self.form.detail;
+			  self.form.detail.mealtime=self.create_time+" "+self.ampm;
+			  
+			  
+			  
+				self.$refs.form.validate(valid => {
+					 let params = formatModel2(self.model, self.form.detail);
+			    if (valid) {
+					 let params = formatModel2(self.model, self.form.detail);
+					// params.product2 = formatModel(self.model.product, self.form.detail.product);
+			      self.loading = true;
+				  
+				  //data message before submit 
+				  
+			      OrderApi.takeSetOrderdetail({
+					  order_id: this.form.detail.order_id,
+			          params: JSON.stringify(params)
+			        }, true)
+			        .then(data => {
+			          self.loading = false;
+			          ElMessage({
+			            message: '修改成功',
+			            type: 'success'
+			          });
+			          self.$router.push('/takeout/order/index');
+			        })
+			        .catch(error => {
+			          self.loading = false;
+			        });
+			    }
+			  });
+					 
+			},
+			
 			/*取消*/
 			cancelFunc() {
-				this.$router.back(-1);
-			},
+			  this.$router.back(-1);
+			}
 
 		}
 	};

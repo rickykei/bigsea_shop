@@ -9,8 +9,13 @@ let OrderApi = {
     },
     /*订单详情*/
     takeOrderdetail(data, errorback) {
-        return request._post('/shop/takeout.order/detail', data, errorback);
+        return request._get('/shop/takeout.order/detail', data, errorback);
     },
+	/*edit invoice*/
+	takeSetOrderdetail(data, errorback) {
+	    return request._post('/shop/takeout.order/detail', data, errorback);
+	},
+	
     storeOrderdetail(data, errorback) {
         return request._post('/shop/store.order/detail', data, errorback);
     },
