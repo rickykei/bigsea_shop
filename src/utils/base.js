@@ -175,7 +175,6 @@ export const formatModel = (thisObj, sourceObj) => {
 				 var a={};
 				 var b=[];
 				for (const item of sourceObj[key]){
-					console.log('hello item '+item.product_id+item.order_product_id);
 					a=formatModel2(thisObj[key][0], item);
 					b.push(a);
 				}
