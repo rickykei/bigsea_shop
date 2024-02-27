@@ -439,6 +439,7 @@
 					0
 					); 
 				this.form.detail.pay_price=	this.form.detail.order_price;
+				this.form.detail.total_price=	this.form.detail.order_price;
 			},
 			addProdRow() {
 			  if (this.form.detail.product == '') {
@@ -476,6 +477,7 @@
 			 
 			  //this.form.model.product_attr.splice(n, 1);
 			  this.form.detail.product.splice(n,1);
+			  this.calTotal();
 			},
 			next() {
 				if (this.active++ > 4) this.active = 0;
