@@ -28,6 +28,9 @@
 		</el-select>
 	  </el-form-item>
         <el-form-item>
+			 
+			  <el-button size="small"  @click.stop="onSubmit()">查询</el-button>
+			 
           <el-button size="small" target="_blank" @click.stop="downloadPdf2()" > 
 		PDF
 	 </el-button>  
@@ -85,7 +88,47 @@
 	 
 	  },
     methods: { 
+		/*获取列表*/
+		getData() {
+			 
+		  let self = this;
+		  let Params = this.searchForm;
+		  Params.dataType = self.activeName;
+		  Params.page = self.curPage;
+		  Params.list_rows = self.pageSize;
+		  self.loading = true;
+		  OrderApi.takeOrderlist(Params, true)
+		    .then(res => {
+		      let list = [];
+		      for (let i = 0; i < res.data.list.data.length; i++) {
+		        let item = res.data.list.data[i];
+		        let topitem = {
+		          order_no: item.order_no,
+						order_id: item.order_id,
+		          create_time: item.create_time,
+		          order_source: item.order_source,
+		          order_source_text: item.order_source_text,
+		          is_top_row: true,
+		          order_status: item.order_status.value,
+		        };
+		        list.push(topitem);
+		        list.push(item);
+		      }
+		      self.tableData.data = list;
+		      self.deliver_name = res.data.deliver_name;
+		      self.deliverType = res.data.deliver.default;
+		      self.totalDataNumber = res.data.list.total;
+		      self.exStyle = res.data.ex_style;
+		      self.order_count = res.data.order_count.order_count;
+		      self.loading = false;
+		    })
+		    .catch(error => {});
+		},
+     /*搜索查询*/
+     onSubmit() {
      
+       this.getData();
+     },
       /*打开添加*/
       detailClick(row) {
         let self = this;
@@ -142,6 +185,11 @@
 	   console.log(this.pdfUrl);
 		return downloadPdf(this.pdfUrl);
       },
+	  carPickUpList: function() {
+	     
+	  		 
+	  		return downloadPdf(this.pdfUrl);
+	  },
      
      
     }
