@@ -15,18 +15,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="提貨時間">
-          <div class="block">
-            <span class="demonstration"></span>
-            <el-date-picker size="small" v-model="searchForm.create_time" type="date" value-format="YYYY-MM-DD" ></el-date-picker>
-          </div>
-        </el-form-item>
-	  <el-form-item label="上午下午">
-		<el-select size="small" v-model="searchForm.ampm" placeholder="请选择">
-		  <el-option v-for="(item, index) in ampm_range" :key="index" :label="item.label" :value="item.id">
-		  </el-option>
-		</el-select>
-	  </el-form-item>
+       
         <el-form-item>
 			 
 			  <el-button size="small"  @click.stop="onSubmit()">查询</el-button>
@@ -39,14 +28,22 @@
       </el-form>
     </div>
     <!--内容-->
-     
+   <div class="table-wrap">
+     <el-table size="small" :data="tableData.data" border style="width: 100%" v-loading="loading">
+       <el-table-column prop="product_name" label="產品名" width="180"></el-table-column>
+       <el-table-column prop="product_content" label="產品描述" width="280"></el-table-column>
+	 
+	   <el-table-column prop="total_num" label="件數" width="280"></el-table-column>
+	   <el-table-column prop="product_unit" label="單位" width="280"></el-table-column>
+     </el-table>
+   </div>
    
   </div>
 </template>
 
 <script>
   import useDownloadPdf from '@/components/file/DownloadPdfButton.vue';
-  import TakeOutApi from '@/api/takeout.js';
+  import CarApi from '@/api/car.js';
   import Cancel from './dialog/cancel.vue';
   import qs from 'qs';
   import { useUserStore } from '@/store';
@@ -56,11 +53,26 @@
       Cancel,    
 	  useDownloadPdf
     },
+	filters: {
+	        strippedHtml(arg) {
+				let regex = /(<([^>]+)>)/ig;
+	            return arg.replace(regex, "a");
+	        }
+	    }, 
     data() {
       return {
-	 
-        /*是否加载完成*/
-        loading: true, 
+	 activeName: 'all',
+	 /*是否加载完成*/
+	 loading: true,
+	 /*列表数据*/
+	 tableData: [],
+	 /*一页多少条*/
+	 pageSize: 20,
+	 /*一共多少条数据*/
+	 totalDataNumber: 0,
+	 /*当前是第几页*/
+	 curPage: 1,
+       
         searchForm: {
           car_no: '',
           deliver_source: '',
@@ -79,15 +91,23 @@
 		token,
       };
     },
+
+
     created() {
       /*获取列表*/
-     
+      // this.getData();
+	  this.loading=false;
     },
 	setup() {
 	    
 	 
 	  },
     methods: { 
+		
+		strippedHtml(arg) {
+			let regex = /(<([^>]+)>)/ig;
+		    return arg.replace(regex, "a");
+		},
 		/*获取列表*/
 		getData() {
 			 
@@ -97,79 +117,27 @@
 		  Params.page = self.curPage;
 		  Params.list_rows = self.pageSize;
 		  self.loading = true;
-		  OrderApi.takeOrderlist(Params, true)
+		  CarApi.getCarlist(Params, true)
 		    .then(res => {
-		      let list = [];
-		      for (let i = 0; i < res.data.list.data.length; i++) {
-		        let item = res.data.list.data[i];
-		        let topitem = {
-		          order_no: item.order_no,
-						order_id: item.order_id,
-		          create_time: item.create_time,
-		          order_source: item.order_source,
-		          order_source_text: item.order_source_text,
-		          is_top_row: true,
-		          order_status: item.order_status.value,
-		        };
-		        list.push(topitem);
-		        list.push(item);
-		      }
+		    
+		     let list = [];
+		     for (let i = 0; i < res.data.list.length; i++) {
+		       let item = res.data.list[i];
+			item.product_content=   this.strippedHtml(item.product_content);
+		       list.push(item);
+		     }
 		      self.tableData.data = list;
-		      self.deliver_name = res.data.deliver_name;
-		      self.deliverType = res.data.deliver.default;
-		      self.totalDataNumber = res.data.list.total;
-		      self.exStyle = res.data.ex_style;
-		      self.order_count = res.data.order_count.order_count;
+		      //self.order_count = res.data.order_count.order_count;
 		      self.loading = false;
 		    })
 		    .catch(error => {});
 		},
      /*搜索查询*/
-     onSubmit() {
-     
+     onSubmit() { 
        this.getData();
      },
-      /*打开添加*/
-      detailClick(row) {
-        let self = this;
-        let params = row.deliver_id;
-        self.$router.push({
-          path: '/takeout/deliver/detail',
-          query: {
-            deliver_id: params
-          }
-        });
-      },
-      /*确认送达*/
-      verifyClick(row) {
-        let self = this;
-        ElMessageBox.confirm('此操作将确认送达, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          self.loading = true;
-          TakeOutApi.verify({
-              deliver_id: row.deliver_id
-            }, true)
-            .then(data => {
-              self.loading = false;
-              if (data.code == 1) {
-               ElMessage({
-                  message: '恭喜你，操作成功',
-                  type: 'success'
-                });
-                self.getData();
-              }
-            })
-            .catch(error => {
-              self.loading = false;
-            });
-
-        }).catch(() => {
-          self.loading = false;
-        });
-      },
+      
+      
     
       
       downloadPdf2: function() {
