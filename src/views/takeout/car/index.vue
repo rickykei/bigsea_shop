@@ -106,7 +106,7 @@
 		
 		strippedHtml(arg) {
 			let regex = /(<([^>]+)>)/ig;
-		    return arg.replace(regex, "a");
+		    return arg.replace(regex, "");
 		},
 		/*获取列表*/
 		getData() {
