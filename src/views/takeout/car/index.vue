@@ -15,7 +15,18 @@
             </el-option>
           </el-select>
         </el-form-item>
-       
+               <el-form-item label="由開始至今日提貨時間 ">
+                 <div class="block">
+                   <span class="demonstration"></span>
+                   <el-date-picker size="small" v-model="searchForm.create_time" type="date" value-format="YYYY-MM-DD" ></el-date-picker>
+                 </div>
+               </el-form-item>
+       	  <el-form-item label="上午/下午">
+       		<el-select size="small" v-model="searchForm.ampm" placeholder="请选择">
+       		  <el-option v-for="(item, index) in ampm_range" :key="index" :label="item.label" :value="item.id">
+       		  </el-option>
+       		</el-select>
+       	  </el-form-item>
         <el-form-item>
 			 
 			  <el-button size="small"  @click.stop="onSubmit()">查询</el-button>
