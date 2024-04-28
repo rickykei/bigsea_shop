@@ -531,7 +531,8 @@
 			            message: '修改成功',
 			            type: 'success'
 			          });
-			          self.$router.push('/takeout/order/index');
+			          //self.$router.push('/takeout/order/index');
+					    this.$router.back(-1);
 			        })
 			        .catch(error => {
 			          self.loading = false;
