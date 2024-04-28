@@ -15,14 +15,14 @@
 				<el-form-item label="由開始至今日提貨時間 ">
 					<div class="block">
 						<span class="demonstration"></span>
-						<el-date-picker size="small" v-model="searchForm.create_time" type="date"
+						<el-date-picker size="small" v-model="searchForm.incar_time" type="date"
 							value-format="YYYY-MM-DD"></el-date-picker>
 					</div>
 				</el-form-item>
 
 				<el-form-item>
 					<el-button size="small" @click.stop="onSubmit()">查询</el-button>
-					<el-button size="small" target="_blank" @click.stop="addClick()">輸入入車單</el-button>
+					<el-button size="small" target="_blank" @click.stop="addClick()" v-auth="'/takeout/incar/add'">輸入車單</el-button>
 
 				</el-form-item>
 			</el-form>
@@ -32,7 +32,15 @@
 			<el-table size="small" :data="tableData.data" border style="width: 100%" v-loading="loading">
 				<el-table-column prop="id" label="入車單ID" width="180"></el-table-column>
 				<el-table-column prop="incar_time" label="入車日" width="180"></el-table-column>
-			  
+				<el-table-column prop="car_no" label="車號" width="180"></el-table-column>
+				 <el-table-column fixed="right" label="操作" width="200">
+				   <template #default="scope" >
+				     <div v-if="!scope.row.is_top_row"> 
+				 	 <el-button @click="editClick(scope.row)" type="text" size="small" v-auth="'/takeout/incar/edit'">Edit
+				 	 </el-button>
+					 </div>
+				   </template>
+				 </el-table-column>
 			</el-table>
 		</div>
 
@@ -83,20 +91,9 @@
 				/*是否打开编辑弹窗*/
 				open_edit: false,
 				/*当前编辑的对象*/
-				car_no: 0,
-				deliver_id: 0,
-				deliver_source: [{
-					label: 'YR897',
-					id: 'YR897'
-				}, {
-					label: 'YG5976',
-					id: 'YG5976'
-				}, {
-					label: '自提',
-					id: 'PICK'
-				}],
-				 
+				car_no: 0, 
 				token,
+				 deliver_source: [{label:'YR897',id:'YR897'},{label:'YG5976',id:'YG5976'},{label:'自提',id:'PICK'}],
 			};
 		},
 		created() {
@@ -139,13 +136,14 @@
 				this.getData();
 			},
 			/*打开添加*/
-			addClick(row) {
+			addClick() {
 				let self = this;
-				let params = row.order_id;
+				let params = self.searchForm; 
 				self.$router.push({
-					path: '/takeout/order/detail',
+					path: '/takeout/incar/add',
 					query: {
-						order_id: params
+						car_no: params.car_no,
+						incar_time: params.incar_time
 					}
 				});
 			},
