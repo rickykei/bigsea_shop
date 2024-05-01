@@ -10,13 +10,13 @@
 					<el-col :span="5">
 						<div class="pb16">
 							<span class="gray9">入車日：</span>
-							{{ form.detail.incar_time}}
+							{{ incar_time}}
 						</div>
 					</el-col>
 					<el-col :span="5">
 						<div class="pb16">
 							<span class="gray9">車牌：</span>
-							{{ form.detail.car_no }}
+							{{ car_no }}
 						</div>
 					</el-col> 
 				</el-row>
@@ -54,12 +54,7 @@
 													:key='item1.product_id'>
 												</el-option>
 											</el-select> 
-									 <span
-									 	:class="{'text-d-line':scope.row.is_user_grade==1,'gray6':scope.row.is_user_grade!=1}">$
-									 	{{ scope.row.line_price }}</span>
-									 <span class="ml10" v-if="scope.row.is_user_grade==1">
-									 	会员折扣价：$ {{ scope.row.grade_product_price }}
-									 </span>
+								 
 									  </div>
 								
 								
@@ -67,14 +62,30 @@
 							</div>
 						</template>
 					</el-table-column>
-					<el-table-column prop="total_num" label="數量">
+					<el-table-column prop="remaining" label="上天車上餘貨">
 						<template #default="scope">
-							<p>x <el-input type="number" v-model="scope.row.total_num" style="width:50%" @change="calTotal"></el-input> </p>
+							 <p>{{scope.row.remaining}} </p>
 						</template>
 					</el-table-column>
-					<el-table-column prop="total_price" label="商品總價(元)">
+					<el-table-column prop="total_num" label="訂貨數量">
 						<template #default="scope">
-							<p>$ {{ scope.row.total_price }}</p>
+							 <p>{{scope.row.total_num}} </p>
+						</template>
+					</el-table-column>
+					<el-table-column prop="incar_qty_am" label="入貨數量(AM)">
+						<template #default="scope">
+							<p>x <el-input type="number" v-model="scope.row.incar_qty_am" style="width:50%" @change="calTotal(scope.$index)"></el-input> </p>
+						</template>
+					</el-table-column>
+					<el-table-column prop="incar_qty_pm" label="入貨數量(PM)">
+						<template #default="scope">
+						 
+							<p>x <el-input type="number" v-model="scope.row.incar_qty_pm" style="width:50%" @change="calTotal(scope.$index)"></el-input> </p>
+						</template>
+					</el-table-column>
+					<el-table-column prop="incar_qty_pm" label="相差">
+						<template #default="scope"> 
+							<p>{{ scope.row.diff}} </p>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -110,20 +121,15 @@
 					category: {},
 					
 				},
-				user_data: {},
-				create_time: '',
-				ampm: '',
-			 
+				user_data: {}, 
+				 incar_time: '',
+				 car_no: '', 
 				 ampm_range: [{label: '上午',id:'09:00'},{label:'下午',id: '14:00'}],
 				 /*模型数据*/
 				 model: {
-				  order_id: 0,
-				  user_id: 0,
-				  total_price: 0,
-				  order_price: 0,
-				  pay_price: 0,
-				  table_no: '',
-				  mealtime: '',
+				  incar_id: 0,
+				  car_no: '',
+				  incar_time: '',
 				  product: [{
 				  	order_product_id: 0,
 				  	product_id: 0,
@@ -134,22 +140,16 @@
 		},
 		created() {
 			/*获取列表*/
+			this.car_no = this.$route.query.car_no;
+			this.incar_time = this.$route.query.incar_time;
 			this.getParams();
+			 
 		},
 		methods: {
-			calTotal(){
-				 
-				this.form.detail.order_price=this.form.detail.product.reduce(
-					(total,item)=>{
-						item.total_price=item.line_price * item.total_num;
-						
-						return total + item.total_price;
-						
-						},
-					0
-					); 
-				this.form.detail.pay_price=	this.form.detail.order_price;
-				this.form.detail.total_price=	this.form.detail.order_price;
+			calTotal(index){
+				  
+				this.form.detail.product[index].diff =(parseInt(this.form.detail.product[index].incar_qty_pm)+parseInt(this.form.detail.product[index].incar_qty_am))-parseInt(this.form.detail.product[index].total_num);
+				
 			},
 			addProdRow() {
 			  if (this.form.detail.product == '') {
@@ -159,11 +159,11 @@
 			    product_name: '',
 			    product_id: 94,
 				category_id: 0,
-				line_price:0,
-				product_price:0,
-				total_price:0,
-				total_pay_price:0,
-				total_num:1,
+				incar_qty_pm: 0,
+				incar_qty_am: 0,
+				diff: 0,
+				remaining: 0,
+				total_num:0,
 			  })
 			},
 			changeCat(selCatId,index){
@@ -176,22 +176,15 @@
 			changeProd(selProdId,index,catId){
 			 
 				this.form.detail.product[index].product_id=this.form.category[catId].products[selProdId].product_id;
-				this.form.detail.product[index].line_price=this.form.category[catId].products[selProdId].line_price;
-				this.form.detail.product[index].product_price=this.form.category[catId].products[selProdId].product_price;
-				this.form.detail.product[index].product_name=this.form.category[catId].products[selProdId].product_name;
-				this.form.detail.product[index].total_price=this.form.category[catId].products[selProdId].line_price*this.form.detail.product[index].total_num;
-				this.form.detail.product[index].total_pay_price=this.form.detail.product[index].total_price;
-				this.calTotal();
+			 	this.form.detail.product[index].product_name=this.form.category[catId].products[selProdId].product_name;
+				  
 			},
 			delIndex(n) {
-			 
-			  //this.form.model.product_attr.splice(n, 1);
+			  
 			  this.form.detail.product.splice(n,1);
-			  this.calTotal();
+			 
 			},
-			next() {
-				if (this.active++ > 4) this.active = 0;
-			},
+			 
 			/*获取参数*/
 			getParams() {
 				let self = this;
@@ -199,14 +192,14 @@
 				// 取到路由带过来的参数
 				const car_no = this.$route.query.car_no;
 				const incar_time = this.$route.query.incar_time;
-				this.form.detail.car_no=car_no;
-				this.form.detail.incar_time=incar_time;
+				
+		
 				//alert(incar_time);
 				let params = [];
 				params.car_no =car_no;
 				params.incar_time=incar_time;
 				
- 			  	IncarApi.getInCarDetailByIncarTimeCarno({
+ 			  	  IncarApi.getInCarDetailByIncarTimeCarno({
 							car_no: params.car_no,
 							incar_time: params.incar_time,
 						},
@@ -214,22 +207,21 @@
 					)
 					.then(data => {
 						self.loading = false;
-						self.form = data.data; 
+						self.form = data.data;
 					})
 					.catch(error => {
 						self.loading = false;
-					});   
+					});    
 					 
-			 
+					
 			},
 			/*提交*/
 			onSubmit: function() {
 			  let self = this;
 			  let params = self.form.detail;
-			  self.form.detail.mealtime=self.create_time+" "+self.ampm;
-			  
-			  
-			  
+			  self.form.detail.incar_time=self.incar_time;
+			  self.form.detail.car_no=self.car_no;
+			   
 				self.$refs.form.validate(valid => {
 					 let params = formatModel2(self.model, self.form.detail);
 			    if (valid) {
@@ -237,16 +229,14 @@
 					// params.product2 = formatModel(self.model.product, self.form.detail.product);
 			      self.loading = true;
 				  
-				  //data message before submit 
-				  
-			      OrderApi.takeSetOrderdetail({
-					  order_id: this.form.detail.order_id,
-			          params: JSON.stringify(params)
+				  //data message before submit  
+			      IncarApi.setInCarDetailByIncarTimeCarno({
+					  params: JSON.stringify(params)
 			        }, true)
 			        .then(data => {
 			          self.loading = false;
 			          ElMessage({
-			            message: '修改成功',
+			            message: '增加成功',
 			            type: 'success'
 			          });
 			          //self.$router.push('/takeout/order/index');

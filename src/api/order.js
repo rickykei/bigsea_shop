@@ -7,11 +7,11 @@ let OrderApi = {
     storeOrderlist(data, errorback) {
         return request._post('/shop/store.order/index', data, errorback);
     },
-    /*订单详情*/
+    /*edit order - get detail first*/
     takeOrderdetail(data, errorback) {
         return request._get('/shop/takeout.order/detail', data, errorback);
     },
-	/*edit invoice*/
+	/*edit order - post modified item detail*/
 	takeSetOrderdetail(data, errorback) {
 	    return request._post('/shop/takeout.order/detail', data, errorback);
 	},

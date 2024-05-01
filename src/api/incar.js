@@ -8,6 +8,10 @@ let InCarApi = {
 	
 	getInCarDetailByIncarTimeCarno(data, errorback) {
 	    return request._get('/shop/takeout.incar/add', data, errorback);
+	},
+	
+	setInCarDetailByIncarTimeCarno(data, errorback) {
+	    return request._post('/shop/takeout.incar/add', data, errorback);
 	}
 }
 
