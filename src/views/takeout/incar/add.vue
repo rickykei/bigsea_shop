@@ -83,7 +83,7 @@
 							<p>x <el-input type="number" v-model="scope.row.incar_qty_pm" style="width:50%" @change="calTotal(scope.$index)"></el-input> </p>
 						</template>
 					</el-table-column>
-					<el-table-column prop="incar_qty_pm" label="相差">
+					<el-table-column prop="diff" label="相差">
 						<template #default="scope"> 
 							<p>{{ scope.row.diff}} </p>
 						</template>
@@ -116,7 +116,7 @@
 						incar_id: 0,
 						incar_time: '',
 						car_no: '',
-						product: []
+						product: [],
 					},
 					category: {},
 					
@@ -127,13 +127,16 @@
 				 ampm_range: [{label: '上午',id:'09:00'},{label:'下午',id: '14:00'}],
 				 /*模型数据*/
 				 model: {
-				  incar_id: 0,
+				 
 				  car_no: '',
 				  incar_time: '',
 				  product: [{
-				  	order_product_id: 0,
+				  	incar_product_id: 0,
 				  	product_id: 0,
 				  	total_num: 0, 
+					incar_qty_am: 0,
+					incar_qty_pm: 0,
+					diff:0,
 				  }],
 				 },
 			};
