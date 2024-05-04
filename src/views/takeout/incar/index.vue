@@ -12,7 +12,7 @@
 						</el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="由開始至今日提貨時間 ">
+				<el-form-item label="上貨日期">
 					<div class="block">
 						<span class="demonstration"></span>
 						<el-date-picker size="small" v-model="searchForm.incar_time" type="date"
@@ -36,7 +36,7 @@
 				 <el-table-column fixed="right" label="操作" width="200">
 				   <template #default="scope" >
 				     <div v-if="!scope.row.is_top_row"> 
-				 	 <el-button @click="editClick(scope.row)" type="text" size="small" v-auth="'/takeout/incar/edit'">Edit
+				 	 <el-button @click="editClick(scope.row.incar_id)" type="text" size="small" v-auth="'/takeout/incar/edit'">Edit
 				 	 </el-button>
 					 </div>
 				   </template>
@@ -145,6 +145,17 @@
 					query: {
 						car_no: params.car_no,
 						incar_time: params.incar_time
+					}
+				});
+			},
+			/*打开edit page*/
+			editClick(incar_id) {
+				let self = this;
+			 
+				self.$router.push({
+					path: '/takeout/incar/edit',
+					query: {
+						incar_id: incar_id, 
 					}
 				});
 			},

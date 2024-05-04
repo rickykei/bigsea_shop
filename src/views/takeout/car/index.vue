@@ -134,7 +134,8 @@
 		     let list = [];
 		     for (let i = 0; i < res.data.list.length; i++) {
 		       let item = res.data.list[i];
-			item.product_content=   this.strippedHtml(item.product_content);
+				item.product_content=   this.strippedHtml(item.product_content);
+				item.total_num = parseInt(item.incar_qty_am)+parseInt(item.incar_qty_pm);
 		       list.push(item);
 		     }
 		      self.tableData.data = list;
