@@ -33,6 +33,7 @@
 				<el-table-column prop="incar_id" label="入車單ID" width="180"></el-table-column>
 				<el-table-column prop="incar_time" label="入車日" width="180"></el-table-column>
 				<el-table-column prop="car_no" label="車號" width="180"></el-table-column>
+				<el-table-column prop="update_time" label="更新時間" width="180"></el-table-column>
 				 <el-table-column fixed="right" label="操作" width="200">
 				   <template #default="scope" >
 				     <div v-if="!scope.row.is_top_row"> 
@@ -43,7 +44,15 @@
 				 </el-table-column>
 			</el-table>
 		</div>
-
+ 
+		<!--分页-->
+      <div class="pagination">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" background
+          :current-page="curPage" :page-size="pageSize" layout="total, prev, pager, next, jumper"
+          :total="totalDataNumber"></el-pagination>
+      </div>
+	  
+	  
 	</div>
 </template>
 
@@ -95,6 +104,14 @@
 				car_no: 0, 
 				token,
 				 deliver_source: [{label:'YR897',id:'YR897'},{label:'YG5976',id:'YG5976'},{label:'自提',id:'PICK'}],
+				 /*统计*/
+				 order_count: {
+				   all: 0,
+				   payment: 0,
+				   delivery: 0,
+				   received: 0,
+				   cancel: 0
+				 },
 			};
 		},
 		created() {
@@ -121,13 +138,14 @@
 					.then(res => {
 
 						let list = [];
-						for (let i = 0; i < res.data.list.length; i++) {
-							let item = res.data.list[i];
+						for (let i = 0; i < res.data.list.data.length; i++) {
+							let item = res.data.list.data[i];
 							//item.product_content = this.strippedHtml(item.product_content);
 							list.push(item);
 						}
 						self.tableData.data = list;
-						//self.order_count = res.data.order_count.order_count;
+						self.totalDataNumber = res.data.list.total;
+						self.order_count = res.data.order_count.order_count;
 						self.loading = false;
 					})
 					.catch(error => {});

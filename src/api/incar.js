@@ -16,6 +16,10 @@ let InCarApi = {
 	
 	getInCarDetailByIncarId(data,errorback) {
 		return request._get('/shop/takeout.incar/edit', data, errorback);
+	},
+	
+	setInCarDetailByIncarId(data,errorback) {
+		return request._post('/shop/takeout.incar/edit', data, errorback);
 	}
 }
 

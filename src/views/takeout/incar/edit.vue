@@ -133,9 +133,9 @@
 				 ampm_range: [{label: '上午',id:'09:00'},{label:'下午',id: '14:00'}],
 				 /*模型数据*/
 				 model: {
-				 
 				  car_no: '',
 				  incar_time: '',
+				  incar_id: '',
 				  product: [{
 				  	incar_product_id: 0,
 				  	product_id: 0,
@@ -223,9 +223,7 @@
 			onSubmit: function() {
 			  let self = this;
 			  let params = self.form.detail;
-			  self.form.detail.incar_time=self.incar_time;
-			  self.form.detail.car_no=self.car_no;
-			   
+		  
 				self.$refs.form.validate(valid => {
 					 let params = formatModel2(self.model, self.form.detail);
 			    if (valid) {
@@ -234,13 +232,13 @@
 			      self.loading = true;
 				  
 				  //data message before submit  
-			      IncarApi.setInCarDetailByIncarTimeCarno({
+			      IncarApi.setInCarDetailByIncarId({
 					  params: JSON.stringify(params)
 			        }, true)
 			        .then(data => {
 			          self.loading = false;
 			          ElMessage({
-			            message: '增加成功',
+			            message: '更新成功',
 			            type: 'success'
 			          });
 			          //self.$router.push('/takeout/order/index');

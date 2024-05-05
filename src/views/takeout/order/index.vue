@@ -48,7 +48,7 @@
           </el-tab-pane>
           <el-tab-pane :label="'进行中'" name="process">
             <template #label>
-              <span>进行中 <el-tag size="mini">{{order_count.process}}</el-tag></span>
+              <span>進行中 <el-tag size="mini">{{order_count.process}}</el-tag></span>
             </template>
           </el-tab-pane>
           <el-tab-pane :label="'已取消'" name="cancel">
@@ -64,13 +64,14 @@
         </el-tabs>
         <el-table size="small" :data="tableData.data" :span-method="arraySpanMethod" border style="width: 100%"
           v-loading="loading">
-          <el-table-column prop="order_no" label="订单信息" width="400">
+          <el-table-column prop="order_no" label="訂單信息" width="400">
             <template #default="scope">
               <div class="order-code" v-if="scope.row.is_top_row">
                 <span class="state-text"
                   :class="{'state-text-red':scope.row.order_source != 10}">{{scope.row.order_source_text}}</span>
                 <span class="c_main">訂單號：{{ scope.row.order_id }}</span>
-                <span class="pl16">下单时间：{{ scope.row.create_time }}</span>
+                <span class="pl16">下單時間：{{ scope.row.create_time }}</span>
+				<span class="pl16">送貨時間：{{ scope.row.mealtime }}</span>
                 <!--是否取消申请中-->
                 <span class="pl16" v-if="scope.row.order_status == 21">
                   <el-tag effect="dark" size="mini">取消申请中</el-tag>
@@ -295,6 +296,7 @@
                 order_no: item.order_no,
 				order_id: item.order_id,
                 create_time: item.create_time,
+				mealtime: item.mealtime,
                 order_source: item.order_source,
                 order_source_text: item.order_source_text,
                 is_top_row: true,

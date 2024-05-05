@@ -15,7 +15,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-               <el-form-item label="由開始至今日提貨時間 ">
+               <el-form-item label="提貨日期">
                  <div class="block">
                    <span class="demonstration"></span>
                    <el-date-picker size="small" v-model="searchForm.create_time" type="date" value-format="YYYY-MM-DD" ></el-date-picker>
