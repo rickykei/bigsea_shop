@@ -42,10 +42,10 @@
    <div class="table-wrap">
      <el-table size="small" :data="tableData.data" border style="width: 100%" v-loading="loading">
        <el-table-column prop="product_name" label="產品名" width="180"></el-table-column>
-       <el-table-column prop="product_content" label="產品描述" width="280"></el-table-column>
-	 
-	   <el-table-column prop="total_num" label="件數" width="280"></el-table-column>
-	   <el-table-column prop="product_unit" label="單位" width="280"></el-table-column>
+	   <el-table-column prop="selling_point" label="賣點" width="200"></el-table-column>
+	   <el-table-column prop="product_content" label="產品描述" width="200"></el-table-column>
+	   <el-table-column prop="total_num" label="件數" width="50"></el-table-column>
+	   <el-table-column prop="product_unit" label="單位" width="50"></el-table-column>
      </el-table>
    </div>
    
@@ -136,6 +136,7 @@
 		       let item = res.data.list[i];
 				item.product_content=   this.strippedHtml(item.product_content);
 				item.total_num = parseInt(item.incar_qty_am)+parseInt(item.incar_qty_pm);
+				if (item.total_num>0)
 		       list.push(item);
 		     }
 		      self.tableData.data = list;
