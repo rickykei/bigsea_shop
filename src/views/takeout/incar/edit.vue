@@ -59,9 +59,9 @@
 													:key='item1.product_id'>
 												</el-option>
 											</el-select> 
-								 
+								 {{scope.row.product_id}}
 									  </div>
-								
+									
 								
 								</div>
 							</div>

@@ -30,11 +30,11 @@
 		<!--内容-->
 		<div class="table-wrap">
 			<el-table size="small" :data="tableData.data" border style="width: 100%" v-loading="loading">
-				<el-table-column prop="incar_id" label="入車單ID" width="180"></el-table-column>
-				<el-table-column prop="incar_time" label="入車日" width="180"></el-table-column>
-				<el-table-column prop="car_no" label="車號" width="180"></el-table-column>
-				<el-table-column prop="update_time" label="更新時間" width="180"></el-table-column>
-				 <el-table-column fixed="right" label="操作" width="200">
+				<el-table-column prop="incar_id" label="入車單ID" ></el-table-column>
+				<el-table-column prop="incar_time" label="入車日" ></el-table-column>
+				<el-table-column prop="car_no" label="車號" ></el-table-column>
+				<el-table-column prop="update_time" label="更新時間" ></el-table-column>
+				 <el-table-column fixed="right" label="操作" >
 				   <template #default="scope" >
 				     <div v-if="!scope.row.is_top_row"> 
 				 	 <el-button @click="editClick(scope.row.incar_id)" type="text" size="small" v-auth="'/takeout/incar/edit'">Edit
