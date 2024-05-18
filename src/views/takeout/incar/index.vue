@@ -37,8 +37,14 @@
 				 <el-table-column fixed="right" label="操作" >
 				   <template #default="scope" >
 				     <div v-if="!scope.row.is_top_row"> 
-				 	 <el-button @click="editClick(scope.row.incar_id)" type="text" size="small" v-auth="'/takeout/incar/edit'">Edit
-				 	 </el-button>
+					 <div v-if="scope.row.edit"> 
+						<el-button @click="editClick(scope.row.incar_id)" type="text" size="small" v-auth="'/takeout/incar/edit'">Edit
+						</el-button>
+					 </div>
+					 <div v-else>
+					 						<el-button @click="viewClick(scope.row.incar_id)" type="text" size="small" v-auth="'/takeout/incar/view'">View
+					 						</el-button>
+					 </div>
 					 </div>
 				   </template>
 				 </el-table-column>
@@ -172,6 +178,17 @@
 			 
 				self.$router.push({
 					path: '/takeout/incar/edit',
+					query: {
+						incar_id: incar_id, 
+					}
+				});
+			},
+			/*打开edit page*/
+			viewClick(incar_id) {
+				let self = this;
+			 
+				self.$router.push({
+					path: '/takeout/incar/view',
 					query: {
 						incar_id: incar_id, 
 					}
