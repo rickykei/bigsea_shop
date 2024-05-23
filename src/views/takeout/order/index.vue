@@ -177,6 +177,8 @@
           :current-page="curPage" :page-size="pageSize" layout="total, prev, pager, next, jumper"
           :total="totalDataNumber"></el-pagination>
       </div>
+	  
+	  
     </div>
     <Cancel v-if="open_edit" :open_edit="open_edit" :order_no="order_no" :order_id="order_id"
       @closeDialog="closeDialogFunc($event, 'edit')">
@@ -462,10 +464,11 @@
   }
 
   .table-wrap .product-info:first-of-type {
-    border-top: none;
+    border-top: none; 
   }
 
   .table-wrap .el-table__body tbody .el-table__row:nth-child(odd) {
     background: #f5f7fa;
+	 
   }
 </style>
