@@ -19,7 +19,7 @@
 								@click="choseMenu(2,item, index)" v-if="item.is_menu==1">
 								<div class="item-box">
 									<span :class="'icon iconfont menu-item-icon ' + item.icon"></span>
-									<span>{{ item.name }}</span>
+									<span >{{ item.name }}</span>
 								</div>
 							</li>
 						</template>
@@ -163,10 +163,15 @@ export default defineComponent({
 	}
 
 	.menu-item-icon.icon.iconfont {
-		font-size: 20px;
+		font-size: 25px;
 	}
 
 	.menu-item .item-box {
 		display: flex;
+		font-size: 16px;
 	}
+	
+	.child-menu .name {
+			font-size: 16px;
+	} 
 </style>

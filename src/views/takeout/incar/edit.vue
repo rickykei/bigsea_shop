@@ -79,13 +79,13 @@
 					</el-table-column>
 					<el-table-column prop="incar_qty_am" label="入貨數量(AM)">
 						<template #default="scope">
-							<p>x <el-input type="number" v-model="scope.row.incar_qty_am" style="width:50%" @change="calTotal(scope.$index)"></el-input> </p>
+							<p>x <el-input type="text" v-model="scope.row.incar_qty_am" style="width:50%" @change="calTotal(scope.$index)"></el-input> </p>
 						</template>
 					</el-table-column>
 					<el-table-column prop="incar_qty_pm" label="入貨數量(PM)">
 						<template #default="scope">
 						 
-							<p>x <el-input type="number" v-model="scope.row.incar_qty_pm" style="width:50%" @change="calTotal(scope.$index)"></el-input> </p>
+							<p>x <el-input type="text" v-model="scope.row.incar_qty_pm" style="width:50%" @change="calTotal(scope.$index)"></el-input> </p>
 						</template>
 					</el-table-column>
 					<el-table-column prop="diff" label="相差">
