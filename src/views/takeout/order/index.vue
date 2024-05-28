@@ -1,9 +1,5 @@
 <template>
-  <!--
-      作者：luoyiming
-      时间：2019-10-25
-      描述：订单列表
-  -->
+ 
   <div class="user">
     <!--搜索表单-->
     <div class="common-seach-wrap">
@@ -11,13 +7,15 @@
         <el-form-item label="訂單號">
           <el-input size="small" v-model="searchForm.order_no" placeholder="請輸入訂單號"></el-input>
         </el-form-item>
+		<!--
         <el-form-item label="配送方式">
           <el-select size="small" v-model="searchForm.style_id" placeholder="請選擇">
             <el-option label="全部" value=""></el-option>
             <el-option v-for="(item, index) in exStyle" :key="index" :label="item.name" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="起始時間">
+		-->
+        <el-form-item label="送貨時間">
           <div class="block">
             <span class="demonstration"></span>
             <el-date-picker size="small" v-model="searchForm.create_time" type="daterange" value-format="YYYY-MM-DD"
@@ -36,9 +34,9 @@
     <div class="product-content">
       <div class="table-wrap">
         <el-tabs v-model="activeName" @tab-change="handleClick">
-          <el-tab-pane label="全部订单" name="all">
+          <el-tab-pane label="全部訂單" name="all">
             <template #label>
-              <span>全部订单 <el-tag size="mini">{{order_count.all}}</el-tag></span>
+              <span>全部訂單 <el-tag size="mini">{{order_count.all}}</el-tag></span>
             </template>
           </el-tab-pane>
           <el-tab-pane :label="'未付款'" name="payment">
@@ -62,21 +60,25 @@
             </template>
           </el-tab-pane>
         </el-tabs>
-        <el-table size="small" :data="tableData.data" :span-method="arraySpanMethod" border style="width: 100%"
-          v-loading="loading">
-          <el-table-column prop="order_no" label="訂單信息" width="400">
+        <el-table size="small" :data="tableData.data" :span-method="arraySpanMethod" border style="width: 100%" v-loading="loading">
+          <!-- <el-table-column prop="order_no" label="訂單信息" width="260">-->
+			  <el-table-column  label="訂單號" width="60">
             <template #default="scope">
-              <div class="order-code" v-if="scope.row.is_top_row">
-                <span class="state-text"
+              <div class="order-code" v-if="!scope.row.is_top_row">
+                  <!--
+				  <span class="state-text"
                   :class="{'state-text-red':scope.row.order_source != 10}">{{scope.row.order_source_text}}</span>
-                <span class="c_main">訂單號：{{ scope.row.order_id }}</span>
-                <span class="pl16">下單時間：{{ scope.row.create_time }}</span>
+				  -->
+                <span class="c_main">{{ scope.row.order_id }}</span>
+				 <!--<br>
+                <span class="pl16">下單時間：{{ scope.row.create_time }}</span><br>
 				<span class="pl16">送貨時間：{{ scope.row.mealtime }}</span>
-                <!--是否取消申请中-->
+               是否取消申请中-->
                 <span class="pl16" v-if="scope.row.order_status == 21">
                   <el-tag effect="dark" size="mini">取消申请中</el-tag>
                 </span>
               </div>
+			  <!--
               <template v-else>
                 <div class="product-info" v-for="(item, index) in scope.row.product" :key="index">
                   <div class="pic"><img v-img-url="item.image.file_path" alt="" /></div>
@@ -94,25 +96,47 @@
                   </div>
                 </div>
               </template>
+			  -->
             </template>
           </el-table-column>
+		  <el-table-column  label="下單時間" >
+		  <template #default="scope">
+		    <div class="order-code" v-if="!scope.row.is_top_row">
+		       <span >{{ scope.row.create_time }}</span> 
+		       
+		    </div>   
+			</template>
+          </el-table-column>
+		  <el-table-column  label="送貨時間" >
+		  <template #default="scope">
+		    <div class="order-code" v-if="!scope.row.is_top_row">
+		        
+		  	<span >{{ scope.row.mealtime }}</span>
+		       
+		    </div>   </template>
+		  </el-table-column>
+          <el-table-column prop="" label="买家"  >
+            <template #default="scope" >
+              <div v-if="!scope.row.is_top_row">
+              <div>{{ scope.row.user.nickName }}({{ scope.row.user.user_id }})</div>
+              
+              </div>
+            </template>
+          </el-table-column>
+		 
           <el-table-column prop="pay_price" label="实付款">
             <template #default="scope" >
               <div v-if="!scope.row.is_top_row">
-              <div class="orange">{{ scope.row.pay_price }}</div>
+              <div class="orange">{{ scope.row.pay_price }}</div> 
+			  <!--
               <p class="gray9">(含配送费：{{ scope.row.express_price }})</p>
               <p class="gray9">(含包装费：{{ scope.row.bag_price }})</p>
+			  -->
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="" label="买家">
-            <template #default="scope" >
-              <div v-if="!scope.row.is_top_row">
-              <div>{{ scope.row.user.nickName }}</div>
-              <div class="gray9">ID：({{ scope.row.user.user_id }})</div>
-              </div>
-            </template>
-          </el-table-column>
+      
+		   <!--
           <el-table-column prop="supplier.name" label="门店名称"></el-table-column>
           <el-table-column prop="state_text" label="交易状态">
             <template #default="scope" >
@@ -121,6 +145,8 @@
               </div>
             </template>
           </el-table-column>
+		  -->
+		   <!--
           <el-table-column prop="pay_type.text" label="支付方式">
             <template #default="scope" >
               <div v-if="!scope.row.is_top_row">
@@ -128,6 +154,7 @@
               </div>
             </template>
           </el-table-column>
+		
           <el-table-column prop="delivery_type.text" label="配送方式">
             <template #default="scope">
               <div  v-if="!scope.row.is_top_row">
@@ -136,6 +163,7 @@
               </div>
             </template>
           </el-table-column>
+		    -->
           <el-table-column fixed="right" label="操作" width="200">
             <template #default="scope" >
               <div v-if="!scope.row.is_top_row">
@@ -448,10 +476,12 @@
 </script>
 <style lang="scss">
   .product-info {
-    padding: 10px 0;
+    padding: 10px 0; 
     border-top: 1px solid #eeeeee;
   }
-
+  
+ 
+  
   .order-code .state-text {
     padding: 2px 4px;
     border-radius: 4px;
