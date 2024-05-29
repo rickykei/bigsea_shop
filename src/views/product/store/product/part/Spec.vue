@@ -6,31 +6,31 @@
     -->
   <div>
     <!--规格设置-->
-    <div class="common-form mt50">规格/库存</div>
+    <div class="common-form mt50">規格/庫存</div>
 
     <!--减库存方式-->
-    <el-form-item label="库存计算方式：">
+    <el-form-item label="庫存計算方式：">
       <el-radio-group v-model="form.model.deduct_stock_type">
-        <el-radio :label="10">下单减库存</el-radio>
-        <el-radio :label="20">付款减库存</el-radio>
+        <el-radio :label="10">下单减庫存</el-radio>
+        <el-radio :label="20">付款减庫存</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="特色分类：">
+    <el-form-item label="特色分類：">
       <el-radio-group v-model="form.model.special_id">
-        <el-radio :label="0">无</el-radio>
+        <el-radio :label="0">無</el-radio>
         <el-radio :label="item.category_id" v-for="(item,index) in form.special" :key="index">{{item.name}}</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="商品单位：" :rules="[{ required: true, message: '请填写商品单位' }]" prop="model.product_unit">
+    <el-form-item label="商品單位：" :rules="[{ required: true, message: '請填寫商品單位' }]" prop="model.product_unit">
       <el-autocomplete class="inline-input" v-model="form.model.product_unit" placeholder="如:大份"
         :fetch-suggestions="querySearch"></el-autocomplete>
     </el-form-item>
-    <el-form-item label="产品规格：">
+    <el-form-item label="產品規格：">
       <el-radio-group v-model="form.model.spec_type" @change="changeSpec">
-        <el-radio :label="10" v-if="!form.isSpecLocked||(form.isSpecLocked&&form.model.spec_type==10)">单规格</el-radio>
-        <el-radio :label="20" v-if="!form.isSpecLocked||(form.isSpecLocked&&form.model.spec_type==20)">多规格</el-radio>
+        <el-radio :label="10" v-if="!form.isSpecLocked||(form.isSpecLocked&&form.model.spec_type==10)">單規格</el-radio>
+        <el-radio :label="20" v-if="!form.isSpecLocked||(form.isSpecLocked&&form.model.spec_type==20)">多規格</el-radio>
       </el-radio-group>
-      <div v-if="form.isSpecLocked" class="red">此商品正在参加活动，不能修改规格</div>
+      <div v-if="form.isSpecLocked" class="red">此商品正在参加活動，不能修改規格</div>
     </el-form-item>
 
     <!--单规格-->

@@ -39,13 +39,13 @@
               </el-form-item>
             </template>
           </el-table-column>
-<!--          <el-table-column label="成本价格">
+         <el-table-column label="成本价格">
             <template slot-scope="scope">
               <el-form-item label="" style="margin-bottom: 0;">
                 <el-input type="number" size="small" prop="cost_price" v-model="scope.row.cost_price"></el-input>
               </el-form-item>
             </template>
-          </el-table-column> -->
+          </el-table-column> 
           <el-table-column label="">
             <template #default="scope">
               <el-form-item label="" style="margin-bottom: 0;">
