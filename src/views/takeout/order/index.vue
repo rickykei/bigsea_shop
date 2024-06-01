@@ -99,7 +99,7 @@
 			  -->
             </template>
           </el-table-column>
-		  <el-table-column  label="下單時間" >
+		<!---  <el-table-column  label="下單時間" >
 		  <template #default="scope">
 		    <div class="order-code" v-if="!scope.row.is_top_row">
 		       <span >{{ scope.row.create_time }}</span> 
@@ -107,6 +107,7 @@
 		    </div>   
 			</template>
           </el-table-column>
+		  -->
 		  <el-table-column  label="送貨時間" >
 		  <template #default="scope">
 		    <div class="order-code" v-if="!scope.row.is_top_row">
@@ -136,7 +137,7 @@
             </template>
           </el-table-column>
       
-		   <!--
+		    <!--
           <el-table-column prop="supplier.name" label="门店名称"></el-table-column>
           <el-table-column prop="state_text" label="交易状态">
             <template #default="scope" >
@@ -145,7 +146,7 @@
               </div>
             </template>
           </el-table-column>
-		  -->
+		   -->
 		   <!--
           <el-table-column prop="pay_type.text" label="支付方式">
             <template #default="scope" >
@@ -164,11 +165,14 @@
             </template>
           </el-table-column>
 		    -->
-          <el-table-column fixed="right" label="操作" width="200">
+          <el-table-column fixed="right" label="操作" >
             <template #default="scope" >
               <div v-if="!scope.row.is_top_row">
+				  <el-button @click="viewPDFClick(scope.row)" type="text" size="small" v-auth="'/takeout/order/pdf'">PDF
+				  </el-button>
               <el-button @click="addClick(scope.row)" type="text" size="small" v-auth="'/takeout/order/detail'">詳情
               </el-button>
+			 
 			  <el-button 
 			   v-if="scope.row.order_status.value==10&&scope.row.pay_status.value==10"
 			   @click="editClick(scope.row)" type="text" size="small" v-auth="'/takeout/order/detail'">更改
@@ -189,10 +193,12 @@
                 v-if="scope.row.deliver_source==10&&scope.row.order_status.value==10&&scope.row.delivery_type.value==10&&scope.row.pay_status.value==20&&scope.row.delivery_status.value==20"
                 @click="verifyClick(scope.row)" type="text" size="small" v-auth="'/takeout/operate/extract'">确认送达
               </el-button>
+			  
               <el-button @click="senDada(scope.row)"
                 v-if="scope.row.pay_status.value==20&&scope.row.deliver_status==0&&scope.row.order_status.value==10&&scope.row.delivery_type.value==10"
                 type="text" size="small" v-auth="'/takeout/operate/sendOrder'">{{deliver_name}}
               </el-button>
+			   
               </div>
             </template>
           </el-table-column>
@@ -356,6 +362,29 @@
             order_id: params
           }
         });
+      },/*打开pdf*/
+      viewPDFClick(row) {
+		    
+		if (row!=""){
+			//console.log(import.meta.env.VITE_NODE_ENV);
+			const link = document.createElement('a');
+			let baseUrl="";
+			if (import.meta.env.VITE_NODE_ENV=="development")
+			 baseUrl = window.location.protocol + '//' + window.location.host+ '/api';
+			else
+			 baseUrl = window.location.protocol + '//' + window.location.host;
+			this.searchForm.token = this.token;
+			this.searchForm.order_no=row.order_id
+			link.href = baseUrl + '/index.php/shop/takeout.order/pdf?' + qs.stringify(this.searchForm);
+			
+			link.target = '_blank';
+			link.download = row.order_id+'.pdf'; 
+			// 模拟点击<a>元素
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+		}
+		  
       },
 	  /*打开添加*/
 	  editClick(row) {
