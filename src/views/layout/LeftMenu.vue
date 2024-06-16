@@ -143,7 +143,7 @@ export default defineComponent({
 					this.$emit('selectMenu', false);
 				}
 			}else if(type == 3){
-				console.log("item",item)
+				 
 				let path = item.path;
 				if(item.redirect_name){
 					path = item.redirect_name;
