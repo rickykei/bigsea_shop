@@ -30,7 +30,7 @@
 		 <!--内容-->
 		 <div class="table-wrap">
 		   <el-table size="small" :data="tableData.data" border style="width: 100%" v-loading="loading">
-			   <el-table-column prop="pay_time" label="日" ></el-table-column>
+			   <el-table-column prop="pay_time" label="立付日" ></el-table-column>
 			   <el-table-column prop="table_no" label="車號" ></el-table-column> 
 		 	   <el-table-column prop="total_price" label="現金" ></el-table-column>
 		 	   
@@ -119,7 +119,7 @@
 			},
 			downloadPdf2: function() {
 			  const { downloadPdf } = useDownloadPdf();
-					this.searchForm.list_rows=10000000;
+					this.searchForm.list_rows=10000000;this.searchForm.page=1;
 					let baseUrl = window.location.protocol + '//' + window.location.host;
 					this.searchForm.token = this.token;
 					if(process.env.NODE_ENV==='development')

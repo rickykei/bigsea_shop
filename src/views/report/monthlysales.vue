@@ -4,7 +4,13 @@
 		<!--搜索表单-->
 		<div class="common-seach-wrap">
 			<el-form size="small" :inline="true" :model="searchForm" class="demo-form-inline">
-
+<el-form-item label="車號">
+					<el-select size="small" v-model="searchForm.car_no" placeholder="请选择">
+						<el-option v-for="(item, index) in deliver_source" :key="index" :label="item.label"
+							:value="item.id">
+						</el-option>
+					</el-select>
+				</el-form-item>
 			 
 		<el-form-item label="報表日期">
           <div class="block">
@@ -24,9 +30,9 @@
 		 <!--内容-->
 		 <div class="table-wrap">
 		   <el-table size="small" :data="tableData.data" border style="width: 100%" v-loading="loading">
-			   <el-table-column prop="product_id" label="產品ID" ></el-table-column>
-		     <el-table-column prop="product_name" label="產品名" ></el-table-column>
-		 	   <el-table-column prop="total_num" label="賣出" ></el-table-column>
+			   <el-table-column prop="pay_time" label="日" ></el-table-column>
+			   <el-table-column prop="table_no" label="車號" ></el-table-column> 
+		 	   <el-table-column prop="total_price" label="現金" ></el-table-column>
 		 	   
 		   </el-table>
 		 </div>
@@ -73,7 +79,7 @@
 				searchForm: { 
 					create_time: '', 
 				},
-				
+				 deliver_source: [{label:'YR897',id:'YR897'},{label:'YG5976',id:'YG5976'},{label:'自提',id:'PICK'}],
 				/*时间*/
 				create_time: '',
 				/*是否打开编辑弹窗*/
@@ -113,14 +119,13 @@
 			},
 			downloadPdf2: function() {
 			  const { downloadPdf } = useDownloadPdf();
-					this.searchForm.list_rows=10000000;
-					this.searchForm.page=1;
+					this.searchForm.list_rows=10000000;this.searchForm.page=1;
 					let baseUrl = window.location.protocol + '//' + window.location.host;
 					this.searchForm.token = this.token;
 					if(process.env.NODE_ENV==='development')
-					 this.pdfUrl = baseUrl + '/api/index.php/shop/report.productsales/export?' + qs.stringify(this.searchForm);
+					 this.pdfUrl = baseUrl + '/api/index.php/shop/report.dailysales/export?' + qs.stringify(this.searchForm);
 					else
-					 this.pdfUrl = baseUrl + '/index.php/shop/report.productsales/export?' + qs.stringify(this.searchForm);
+					 this.pdfUrl = baseUrl + '/index.php/shop/report.dailysales/export?' + qs.stringify(this.searchForm);
 			 
 			 
 					return downloadPdf(this.pdfUrl);
@@ -143,13 +148,12 @@
 				Params.page = self.curPage;
 				Params.list_rows = self.pageSize;
 				self.loading = true;
-				ReportApi.getProductSales(Params, true)
+				ReportApi.getDailySales(Params, true)
 					.then(res => {
 
 						let list = [];
 						for (let i = 0; i < res.data.list.data.length; i++) {
-							let item = res.data.list.data[i];
-							item.product_content=   this.strippedHtml(item.product_content);
+							let item = res.data.list.data[i]; 
 							list.push(item);
 						 
 						}
